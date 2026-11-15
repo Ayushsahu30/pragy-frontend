@@ -78,6 +78,11 @@ export default function Dashboard() {
           </ul>
         </nav>
         <div className="flex flex-wrap items-center gap-3 border-t border-[#5a4c40] pt-5 lg:mt-auto lg:flex-col lg:items-stretch">
+          {user.role === "ADMIN" && (
+            <Link href="/admin" className={buttonClass("outlineLight", "min-h-[50px] px-5")}>
+              Admin
+            </Link>
+          )}
           <Link href="/#start" className={buttonClass("peach", "min-h-[50px] px-5")}>
             Book a call
           </Link>
