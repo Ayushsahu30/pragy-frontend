@@ -1,4 +1,4 @@
-import { Eyebrow, PhotoPlaceholder, Section, sectionTitleClass } from "@/components/ui";
+import { Eyebrow, Photo, Section, sectionTitleClass } from "@/components/ui";
 
 // TODO(client): add the month and year of each photo; empty dates are hidden.
 const steps = [
@@ -6,20 +6,24 @@ const steps = [
     date: "",
     title: "The Starting Point",
     text: "I was overweight. My first step was getting into the gym and taking control of my physique.",
+    photo: { src: "/images/journey-01-starting-point.jpg", alt: "Pragy before his transformation", position: "50% 50%" },
   },
   {
     date: "",
     title: "Building My Physique",
     text: "I started losing weight and developing a better understanding of training and nutrition.",
+    photo: { src: "/images/journey-02-building-my-physique.jpg", alt: "Pragy flexing during his physique progress", position: "50% 50%" },
   },
   {
     date: "",
     title: "Understanding Looksmaxing",
+    photo: { src: "/images/journey-03-understanding-looksmaxing.jpg", alt: "Pragy in glasses and a teal shirt at India Gate", position: "50% 50%" },
     text: "I realised that physique was only one part of the equation. I began paying attention to skin, grooming, facial aesthetics and posture.",
   },
   {
     date: "",
     title: "What I Do Today",
+    photo: { src: "/images/journey-04-what-i-do-today.jpg", alt: "Pragy today, with styled hair and a black jacket", position: "50% 50%" },
     text: "I now use that knowledge to educate others and help them approach their own appearance goals with a structured plan.",
   },
 ];
@@ -58,9 +62,11 @@ export default function Journey() {
                 <h3 className="m-0 mb-1 mt-0.5 font-serif text-[36px] font-medium leading-[1.1]">{step.title}</h3>
                 <p className="m-0 text-base text-ink-soft">{step.text}</p>
               </div>
-              <PhotoPlaceholder
-                dark={isLast}
-                label="Photo"
+              <Photo
+                src={step.photo.src}
+                alt={step.photo.alt}
+                sizes="(min-width: 768px) 380px, 100vw"
+                position={step.photo.position}
                 className="h-[220px] min-w-0 max-w-[380px] flex-[1_1_260px] rounded-3xl"
               />
             </li>

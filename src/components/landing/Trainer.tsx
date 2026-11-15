@@ -1,5 +1,5 @@
 import { InstagramIcon, YouTubeIcon } from "@/components/icons";
-import { ButtonLink, Eyebrow, PhotoPlaceholder, Section } from "@/components/ui";
+import { ButtonLink, Eyebrow, Photo, Section } from "@/components/ui";
 import { site } from "@/content/site";
 
 export default function Trainer() {
@@ -53,9 +53,27 @@ export default function Trainer() {
       </div>
 
       <div className="grid min-w-0 flex-[1_1_340px] grid-cols-2 gap-4">
-        <PhotoPlaceholder dark label="Photo of Pragy" className="col-span-2 min-h-[360px] rounded-b-3xl rounded-t-[180px]" />
-        <PhotoPlaceholder dark label="Post 1" className="min-h-[150px] rounded-3xl" />
-        <PhotoPlaceholder dark label="Post 2" className="min-h-[150px] rounded-3xl" />
+        <Photo
+          src="/images/meet-pragy-main-photo.jpg"
+          alt="Pragy in a blue shirt and white trousers in front of a palace"
+          sizes="(min-width: 1024px) 540px, 100vw"
+          position="50% 42%"
+          className="col-span-2 min-h-[360px] rounded-b-3xl rounded-t-[180px]"
+        />
+        <Photo
+          src="/images/meet-pragy-post-1.jpg"
+          alt="Pragy sitting on stone steps in a checked shirt and sunglasses"
+          sizes="(min-width: 1024px) 270px, 50vw"
+          position="50% 8%"
+          className="min-h-[150px] rounded-3xl"
+        />
+        <Photo
+          src="/images/meet-pragy-post-2.jpg"
+          alt="Pragy at the gym in a black tank top"
+          sizes="(min-width: 1024px) 270px, 50vw"
+          position="50% 20%"
+          className="min-h-[150px] rounded-3xl"
+        />
       </div>
     </Section>
   );

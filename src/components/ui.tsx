@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -103,6 +104,31 @@ export function PhotoPlaceholder({
       } ${className}`}
     >
       [{label}]
+    </div>
+  );
+}
+
+/**
+ * Real photo in a rounded box. The box's size comes from `className`; the
+ * image covers it, and `position` chooses which part stays visible.
+ * Next.js serves a resized WebP version for each screen size.
+ */
+export function Photo({
+  src,
+  alt,
+  sizes,
+  className = "",
+  position = "50% 50%",
+}: {
+  src: string;
+  alt: string;
+  sizes: string;
+  className?: string;
+  position?: string;
+}) {
+  return (
+    <div className={`relative overflow-hidden bg-sand ${className}`}>
+      <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" style={{ objectPosition: position }} />
     </div>
   );
 }
