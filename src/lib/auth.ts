@@ -69,6 +69,17 @@ export const authApi = {
     call<{ user: PublicUser }>("/auth/profile", { method: "PATCH", body: JSON.stringify(input) }),
 
   logout: () => call<{ ok: true }>("/auth/logout", { method: "POST" }),
+
+  /** Which login methods are switched on. */
+  options: () => call<{ google: boolean }>("/auth/options"),
+};
+
+/** Messages for the ?error=... codes the backend adds when Google sign-in fails. */
+export const googleErrors: Record<string, string> = {
+  google_cancelled: "Google sign-in was cancelled. Try again, or use your email below.",
+  google_failed: "We couldn't sign you in with Google. Please try again, or use your email below.",
+  google_unavailable: "Google sign-in isn't available right now. Please use your email below.",
+  google_busy: "Too many sign-in attempts. Please wait a few minutes and try again.",
 };
 
 /**
