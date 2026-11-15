@@ -1,6 +1,5 @@
 import PtApplyButton from "@/components/landing/PtApplyButton";
 import { Eyebrow, PhotoPlaceholder } from "@/components/ui";
-import { ptPlans } from "@/content/prices";
 
 const steps = [
   "Tap “Apply for personal training”",
@@ -15,8 +14,6 @@ const steps = [
  */
 export default function PersonalTraining({ asPage = false }: { asPage?: boolean }) {
   const Heading = asPage ? "h1" : "h2";
-  const planNames = ptPlans.map((plan) => plan.name);
-  const planList = `${planNames.slice(0, -1).join(", ")} and ${planNames.at(-1)}`;
 
   return (
     <section
@@ -28,11 +25,11 @@ export default function PersonalTraining({ asPage = false }: { asPage?: boolean 
         <div className="flex min-w-0 flex-[1.1_1_360px] flex-col items-start gap-6">
           <Eyebrow className="text-peach">Personal training</Eyebrow>
           <Heading className="m-0 font-serif text-[clamp(40px,5vw,64px)] font-medium leading-[1.04] tracking-[-0.01em]">
-            Want Pragy to coach you <em className="text-peach">personally?</em>
+            Want me to train you <em className="text-peach">personally?</em>
           </Heading>
           <p className="m-0 max-w-[560px] text-[19px] text-mist">
-            Three plans: {planList}, for 1, 3 or 6 months. Personal training is by application. Fill in a short form and
-            WhatsApp opens with your message ready to send to the team.
+            Personal training with me is by application. Fill in a short form and WhatsApp opens with your message
+            ready to send to my team.
           </p>
           <ol className="m-0 flex list-none flex-col gap-3.5 p-0 text-base leading-[1.4]">
             {steps.map((step, index) => (
@@ -48,15 +45,16 @@ export default function PersonalTraining({ asPage = false }: { asPage?: boolean 
             ))}
           </ol>
           <PtApplyButton />
-          <span className="text-sm text-mist">No payment at this step. The team replies on WhatsApp with the plan details.</span>
+          <span className="text-sm text-mist">No payment at this step. My team replies on WhatsApp with the plan details.</span>
         </div>
 
         <div className="flex min-w-0 flex-[1_1_360px] flex-col gap-3.5">
           <PhotoPlaceholder
             dark
-            label="Video of Pragy explaining personal training"
+            label="Video of Pragy"
             className="aspect-[4/5] max-h-[620px] w-full rounded-b-[28px] rounded-t-[220px]"
           />
+          <span className="text-sm text-mist">Watch me explain how personal training works.</span>
         </div>
       </div>
     </section>

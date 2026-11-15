@@ -6,18 +6,18 @@ export default function Trainer() {
   return (
     <Section
       id="trainer"
-      label="About Pragy"
+      label="About the trainer"
       className="bg-ink text-white"
       innerClassName="flex flex-wrap items-stretch gap-x-16 gap-y-12"
     >
       <div className="flex min-w-0 flex-[1.3_1_380px] flex-col items-start gap-6">
-        <Eyebrow className="text-peach">A note from me</Eyebrow>
+        <Eyebrow className="text-peach">Meet your trainer</Eyebrow>
         <h2 className="m-0 font-serif text-[clamp(48px,6vw,84px)] font-medium leading-none tracking-[-0.01em]">
-          Hey, I’m <em className="text-peach">Pragy.</em>
+          Hey, I’m <em className="text-peach">{site.trainerName}.</em>
         </h2>
         <p className="m-0 max-w-[600px] text-[19px] text-mist">
-          I teach looksmaxing one on one: the body, the diet, the gym, the skin, the grooming, the posture, the details
-          nobody explains. Your plan is built by me, personally, and when you message, you are talking to me.
+          I lost the weight in the gym, then learned that skin, grooming and posture matter just as much. Today I
+          teach the same method I used on myself.
         </p>
 
         <div className="mt-2 grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-4">
@@ -33,7 +33,7 @@ export default function Trainer() {
 
         <ButtonLink href={site.instagram.url} external variant="light">
           <InstagramIcon />
-          Follow on Instagram
+          Follow me on Instagram
         </ButtonLink>
       </div>
 

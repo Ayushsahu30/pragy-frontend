@@ -151,7 +151,7 @@ export default function PtApplyButton({ className = "" }: { className?: string }
               Hi, I am [Name], age [Age], height [Height] cm, weight [Weight] kg. My email is [Email]. I am looking for
               looksmaxing personal training.
             </p>
-            <span className="text-[13px] text-ink-soft">Your details are shared with the coaching team so they can contact you.</span>
+            <span className="text-[13px] text-ink-soft">Your details are shared with my team so they can contact you.</span>
           </div>
         </div>
       </dialog>

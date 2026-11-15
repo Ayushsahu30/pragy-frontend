@@ -11,7 +11,7 @@ export default function SiteFooter() {
         <div className="flex flex-wrap items-start justify-between gap-x-14 gap-y-7">
           <div className="flex flex-col gap-2">
             <div className="font-serif text-[34px] font-semibold leading-[1.1]">{site.name}</div>
-            <p className="m-0 max-w-[320px] text-[15px] text-mist">Looksmaxing, one on one.</p>
+            <p className="m-0 max-w-[320px] text-[15px] text-mist">{site.tagline}</p>
             <a
               href={site.instagram.url}
               target="_blank"
@@ -36,7 +36,7 @@ export default function SiteFooter() {
 
         <p className="m-0 flex max-w-[640px] items-start gap-3 rounded-2xl bg-ink-deep p-4 text-sm text-mist">
           <ShieldIcon className="mt-0.5 flex-none text-peach" />
-          We never ask for your OTP, UPI PIN or card CVV. Pay only through this website.
+          My team and I never ask for your OTP, UPI PIN or card CVV. Pay only through this website.
         </p>
 
         <div className="border-t border-ink-deep pt-6 text-sm text-mist">

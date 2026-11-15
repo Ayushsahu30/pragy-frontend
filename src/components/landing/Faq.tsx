@@ -1,35 +1,26 @@
 import { PlusIcon } from "@/components/icons";
 import { Eyebrow, Section, sectionTitleClass } from "@/components/ui";
-import { prices, ptPlans } from "@/content/prices";
+import { prices } from "@/content/prices";
 import { formatINR } from "@/lib/format";
 
 const team = formatINR(prices.teamCall.amount);
-const consultation = formatINR(prices.consultation.amount);
 
 const questions = [
   {
     q: "Where should I start?",
-    a: `If you are unsure, book the ${team} call with the team. We will point you to the right course or plan.`,
+    a: `If you are unsure, book the ${team} discovery call. My team will point you to the right course or plan.`,
   },
   {
     q: `Is the ${team} call refundable?`,
-    a: `Yes. If you decide not to join after the call, you get a full refund. If you join, the ${team} is fully adjusted in your plan.`,
+    a: "Yes. If you decide not to join after the call, it is refunded in full. If you join, it comes off the price.",
   },
   {
-    q: `Is the ${consultation} consultation refundable?`,
-    a: "No. The 30-minute consultation with Pragy is not refundable.",
-  },
-  {
-    q: "Is this only about the face?",
-    a: "No. Looksmaxing covers your whole look: fat loss, weight gain, gym training, diet, skin, grooming, posture and oral health.",
+    q: `Is the ${formatINR(prices.consultation.amount)} call refundable?`,
+    a: "No. The 1-on-1 call with me is not refundable.",
   },
   {
     q: "Can you help me lose weight or gain weight?",
-    a: "Yes. Fat loss, weight gain and building muscle are a core part of the coaching. Your diet and workout plan is built for your body and your goal.",
-  },
-  {
-    q: "Who builds my plan?",
-    a: "Pragy, personally. Your plan is built by him for your body and your goals, not copied from a template.",
+    a: "Yes. Fat loss, weight gain and building muscle are a big part of what I teach, along with diet, skin, grooming and posture.",
   },
   {
     q: "How long do I keep the PDF course?",
@@ -37,17 +28,13 @@ const questions = [
   },
   {
     q: `What is in the ${formatINR(prices.videoCourse.amount)} course?`,
-    a: "The full video course and our Skool community, plus member-only extras on this website.",
-  },
-  {
-    q: "How much does personal training cost?",
-    a: `There are three plans (${ptPlans.map((p) => p.name).join(", ")}) for 1, 3 or 6 months. Apply through the form and the team shares the details on WhatsApp.`,
+    a: "My full video course and my Skool community, plus member-only extras.",
   },
 ];
 
 export default function Faq() {
   return (
-    <Section id="faq" label="Frequently asked questions" className="bg-cream" innerClassName="flex flex-wrap gap-x-16 gap-y-10">
+    <Section id="faq" label="Frequently asked questions" innerClassName="flex flex-wrap gap-x-16 gap-y-10">
       <div className="flex min-w-0 flex-[1_1_280px] flex-col gap-4">
         <Eyebrow>FAQ</Eyebrow>
         <h2 className={sectionTitleClass}>

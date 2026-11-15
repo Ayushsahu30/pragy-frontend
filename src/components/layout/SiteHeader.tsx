@@ -22,7 +22,7 @@ export default function SiteHeader({ user }: { user: CurrentUser | null }) {
           {site.name}
         </Link>
 
-        <ul className="m-0 hidden list-none gap-6 p-0 text-[15px] lg:flex">
+        <ul className="m-0 hidden list-none gap-6 p-0 text-[15px] xl:flex">
           {navLinks.map((link) => (
             <li key={link.href}>
               <Link href={link.href} className={`rounded py-3 text-ink-soft no-underline hover:text-ink ${focus}`}>
@@ -44,7 +44,7 @@ export default function SiteHeader({ user }: { user: CurrentUser | null }) {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((open) => !open)}
-            className={`flex h-12 w-12 flex-none items-center justify-center rounded-full border border-line bg-white text-ink lg:hidden ${focus}`}
+            className={`flex h-12 w-12 flex-none items-center justify-center rounded-full border border-line bg-white text-ink xl:hidden ${focus}`}
           >
             {menuOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
@@ -54,7 +54,7 @@ export default function SiteHeader({ user }: { user: CurrentUser | null }) {
       {menuOpen && (
         <div
           id="mobile-menu"
-          className="mx-auto mt-2 max-w-[1200px] rounded-[28px] border border-line bg-cream p-3 shadow-[0_16px_40px_rgba(72,60,50,0.12)] lg:hidden"
+          className="mx-auto mt-2 max-w-[1200px] rounded-[28px] border border-line bg-cream p-3 shadow-[0_16px_40px_rgba(72,60,50,0.12)] xl:hidden"
         >
           <ul className="m-0 flex list-none flex-col p-0">
             {navLinks.map((link) => (

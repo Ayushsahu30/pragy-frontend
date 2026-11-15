@@ -24,7 +24,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: `${site.name} | Looksmaxing, one on one`,
+    default: `${site.name} | ${site.tagline.replace(/\.$/, "")}`,
     template: `%s | ${site.name}`,
   },
   description: site.description,

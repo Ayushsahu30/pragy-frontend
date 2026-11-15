@@ -1,36 +1,24 @@
 import { Eyebrow, PhotoPlaceholder, Section, sectionTitleClass } from "@/components/ui";
 
-// Pragy's story, from page 2 of the brochure.
+// TODO(client): add the month and year of each photo; empty dates are hidden.
 const steps = [
-  { title: "Where I started", text: "I was fat. So I started going to the gym.", photo: "Before photo" },
-  {
-    title: "The weight came off",
-    text: "I lost the weight, but my face did not change. That was the part I had missed.",
-    photo: "After the weight loss",
-  },
-  {
-    title: "Face first",
-    text: "Then I started putting my face first: the skin, the grooming, the posture, the details nobody explains. That is when everything changed.",
-    photo: "Face-first progress",
-  },
-  {
-    title: "Today",
-    text: "Now I teach exactly that, one on one, so you do not spend years figuring it out the way I did.",
-    photo: "Now photo",
-  },
+  { date: "", title: "Where I started", text: "I was overweight, so I started going to the gym." },
+  { date: "", title: "First changes", text: "I lost the weight, but my face had not changed yet." },
+  { date: "", title: "Halfway", text: "I started working on my skin, grooming and posture too." },
+  { date: "", title: "Today", text: "I now teach the same method to others." },
 ];
 
 export default function Journey() {
   return (
-    <Section id="journey" label="Pragy's own journey" innerClassName="flex flex-col gap-14">
+    <Section id="journey" label="Trainer transformation" innerClassName="flex flex-col gap-14">
       <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-4">
         <div className="flex flex-col gap-4">
           <Eyebrow>My own journey</Eyebrow>
           <h2 className={`${sectionTitleClass} max-w-[760px]`}>
-            I went through it <em>first.</em>
+            My transformation <em>over time.</em>
           </h2>
         </div>
-        <p className="m-0 max-w-[360px] text-ink-soft">I follow the same method I now teach.</p>
+        <p className="m-0 max-w-[360px] text-ink-soft">I followed the same method I now teach.</p>
       </div>
 
       <ol className="m-0 flex list-none flex-col p-0">
@@ -50,12 +38,13 @@ export default function Journey() {
                 {index + 1}
               </span>
               <div className="min-w-0 flex-[1_1_260px]">
-                <h3 className="m-0 mb-1 font-serif text-[36px] font-medium leading-[1.1]">{step.title}</h3>
+                {step.date && <span className="text-[13px] font-semibold text-rust">{step.date}</span>}
+                <h3 className="m-0 mb-1 mt-0.5 font-serif text-[36px] font-medium leading-[1.1]">{step.title}</h3>
                 <p className="m-0 text-base text-ink-soft">{step.text}</p>
               </div>
               <PhotoPlaceholder
                 dark={isLast}
-                label={step.photo}
+                label="Photo"
                 className="h-[220px] min-w-0 max-w-[380px] flex-[1_1_260px] rounded-3xl"
               />
             </li>

@@ -5,8 +5,12 @@
  */
 export const site = {
   name: "Pragy",
+  tagline: "I help people look their best.",
   description:
-    "One on one looksmaxing coaching with Pragy: fat loss, weight gain, gym training, diet, skincare, grooming and posture.",
+    "Pragy helps people look their best: courses, community, 1-on-1 calls and personal coaching for fat loss, weight gain, diet, skin and grooming.",
+
+  /** Lead trainer's name as shown on the site. */
+  trainerName: "Pragy",
 
   instagram: {
     handle: "itspragygurjar",
@@ -43,10 +47,11 @@ export const site = {
 
 /** Main menu. Links start with "/" so they also work from other pages. */
 export const navLinks = [
-  { href: "/#trainer", label: "About Pragy" },
+  { href: "/#trainer", label: "About me" },
   { href: "/#results", label: "Results" },
   { href: "/#courses", label: "Courses" },
-  { href: "/#one-on-one", label: "Consultation" },
+  { href: "/#start", label: "Where to start" },
+  { href: "/#one-on-one", label: "1-on-1 call" },
   { href: "/#personal-training", label: "Personal training" },
   { href: "/#faq", label: "FAQ" },
 ];

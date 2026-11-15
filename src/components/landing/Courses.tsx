@@ -19,7 +19,7 @@ export default function Courses() {
             <Eyebrow>Self-paced</Eyebrow>
             <h3 className="m-0 mb-1 mt-0.5 font-serif text-[34px] font-medium leading-[1.1]">PDF Course</h3>
             <p className="m-0 text-[15px] text-ink-soft">
-              The entry-level guide, read inside our secure viewer. 30 days of access.
+              My entry-level guide, read inside a secure viewer. 30 days of access.
             </p>
           </div>
           <span className="font-serif text-[52px] font-medium leading-none">{formatPrice(prices.pdfCourse)}</span>
@@ -33,7 +33,7 @@ export default function Courses() {
             <Eyebrow className="text-peach">Most complete</Eyebrow>
             <h3 className="m-0 mb-1 mt-0.5 font-serif text-[34px] font-medium leading-[1.1]">Video Course + Community</h3>
             <p className="m-0 text-[15px] text-mist">
-              The full video course and our Skool community, plus member-only extras on this site.
+              My full video course and my Skool community, plus member-only extras on this site.
             </p>
           </div>
           <span className="font-serif text-[52px] font-medium leading-none">{formatPrice(prices.videoCourse)}</span>
