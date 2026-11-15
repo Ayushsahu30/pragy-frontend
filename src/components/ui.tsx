@@ -119,16 +119,30 @@ export function Photo({
   sizes,
   className = "",
   position = "50% 50%",
+  label,
+  labelTone = "dark",
 }: {
   src: string;
   alt: string;
   sizes: string;
   className?: string;
   position?: string;
+  /** Optional small tag in the top-left corner, e.g. "Before". */
+  label?: string;
+  labelTone?: "dark" | "peach";
 }) {
   return (
     <div className={`relative overflow-hidden bg-sand ${className}`}>
       <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" style={{ objectPosition: position }} />
+      {label && (
+        <span
+          className={`absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] sm:text-[11px] ${
+            labelTone === "peach" ? "bg-peach text-ink" : "bg-black/55 text-white"
+          }`}
+        >
+          {label}
+        </span>
+      )}
     </div>
   );
 }

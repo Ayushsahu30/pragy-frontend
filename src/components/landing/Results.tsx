@@ -1,15 +1,32 @@
 import { ArrowRightIcon } from "@/components/icons";
-import { Eyebrow, PhotoPlaceholder, Section, sectionTitleClass } from "@/components/ui";
+import { Eyebrow, Photo, Section, sectionTitleClass } from "@/components/ui";
 import { site } from "@/content/site";
 
-// TODO(client): duration, verified areas and testimonial for each client.
-const featured = {
-  name: "Gaurav",
-  summary: "[Duration of coaching] · Areas worked on: [Verified areas]",
-  quote: "[Actual client testimonial.]",
-};
+// Real clients. `areas` is shown only when filled in.
+type Client = { name: string; areas: string[]; before: string; after: string };
 
-const moreClients = ["Client Name", "Client Name"];
+const clients: Client[] = [
+  {
+    name: "Gaurav",
+    areas: ["Eye area", "Hairstyle", "Jawline", "Physique"],
+    before: "/images/result-gaurav-before.jpg",
+    after: "/images/result-gaurav-after.jpg",
+  },
+  {
+    name: "Jegtej",
+    areas: [],
+    before: "/images/result-jegtej-before.jpg",
+    after: "/images/result-jegtej-after.jpg",
+  },
+  {
+    name: "Assam",
+    areas: [],
+    before: "/images/result-assam-before.jpg",
+    after: "/images/result-assam-after.jpg",
+  },
+];
+
+const [featured, ...moreClients] = clients;
 
 export default function Results() {
   return (
@@ -28,32 +45,70 @@ export default function Results() {
 
       <article className="flex flex-wrap items-center gap-x-12 gap-y-7 rounded-[28px] border border-line bg-white p-5 sm:p-7">
         <div className="grid min-w-0 flex-[1.2_1_340px] grid-cols-2 gap-2.5">
-          <PhotoPlaceholder label="Before" className="h-[clamp(220px,40vw,340px)] rounded-[20px]" />
-          <PhotoPlaceholder dark label="After" className="h-[clamp(220px,40vw,340px)] rounded-[20px]" />
+          <Photo
+            src={featured.before}
+            alt={`${featured.name} before coaching`}
+            sizes="(min-width: 1024px) 300px, 50vw"
+            label="Before"
+            className="h-[clamp(220px,40vw,340px)] rounded-[20px]"
+          />
+          <Photo
+            src={featured.after}
+            alt={`${featured.name} after coaching`}
+            sizes="(min-width: 1024px) 300px, 50vw"
+            label="After"
+            labelTone="peach"
+            className="h-[clamp(220px,40vw,340px)] rounded-[20px]"
+          />
         </div>
-        <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-3.5">
-          <span className="text-sm font-semibold text-rust">{featured.summary}</span>
-          <blockquote className="m-0 font-serif text-[clamp(28px,3vw,38px)] font-medium italic leading-[1.2]">
-            “{featured.quote}”
-          </blockquote>
-          <span className="text-base text-ink-soft">{featured.name}</span>
+        <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-4">
+          <h3 className="m-0 font-serif text-[clamp(36px,4vw,48px)] font-medium leading-none">{featured.name}</h3>
+          {featured.areas.length > 0 && (
+            <div className="flex flex-col gap-2.5">
+              <span className="text-sm font-semibold text-rust">Areas worked on</span>
+              <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+                {featured.areas.map((area) => (
+                  <li
+                    key={area}
+                    className="rounded-full border border-line bg-cream px-4 py-2 text-[15px] font-semibold text-ink"
+                  >
+                    {area}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </article>
 
       <ul className="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-6 p-0">
-        {moreClients.map((client, index) => (
+        {moreClients.map((client) => (
           <li
-            key={index}
+            key={client.name}
             className="flex flex-wrap items-center gap-5 rounded-[28px] border border-line bg-white p-5.5"
           >
             <div className="grid min-w-0 flex-[1_1_220px] grid-cols-2 gap-2">
-              <PhotoPlaceholder label="Before" className="h-[180px] rounded-2xl" />
-              <PhotoPlaceholder dark label="After" className="h-[180px] rounded-2xl" />
+              <Photo
+                src={client.before}
+                alt={`${client.name} before coaching`}
+                sizes="(min-width: 1024px) 160px, 45vw"
+                label="Before"
+                className="h-[180px] rounded-2xl"
+              />
+              <Photo
+                src={client.after}
+                alt={`${client.name} after coaching`}
+                sizes="(min-width: 1024px) 160px, 45vw"
+                label="After"
+                labelTone="peach"
+                className="h-[180px] rounded-2xl"
+              />
             </div>
             <div className="min-w-0 flex-[1_1_200px]">
-              <h3 className="m-0 font-serif text-[30px] font-medium leading-[1.1]">[{client}]</h3>
-              <span className="text-sm font-semibold text-rust">[Duration of coaching] · Areas worked on: [Verified areas]</span>
-              <p className="m-0 mt-2 text-[15px] text-ink-soft">“[Actual client testimonial.]”</p>
+              <h3 className="m-0 font-serif text-[30px] font-medium leading-[1.1]">{client.name}</h3>
+              {client.areas.length > 0 && (
+                <span className="text-sm font-semibold text-rust">Areas worked on: {client.areas.join(" · ")}</span>
+              )}
             </div>
           </li>
         ))}
