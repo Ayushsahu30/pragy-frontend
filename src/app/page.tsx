@@ -1,20 +1,31 @@
-import BackendStatus from "@/components/BackendStatus";
+import Consultation from "@/components/landing/Consultation";
+import Courses from "@/components/landing/Courses";
+import Faq from "@/components/landing/Faq";
+import Hero from "@/components/landing/Hero";
+import HowToStart from "@/components/landing/HowToStart";
+import Journey from "@/components/landing/Journey";
+import PersonalTraining from "@/components/landing/PersonalTraining";
+import OnePromise from "@/components/landing/Promise";
+import Results from "@/components/landing/Results";
+import TeamCall from "@/components/landing/TeamCall";
+import Trainer from "@/components/landing/Trainer";
+import WhatYouGet from "@/components/landing/WhatYouGet";
 
-// Phase 1 test page. It is replaced by the real landing page in Phase 2.
 export default function Home() {
   return (
-    <main className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-16 dark:bg-black">
-      <div className="flex w-full max-w-md flex-col gap-6 rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-950">
-        <div>
-          <h1 className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">
-            Project setup check
-          </h1>
-          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-            This page asks the backend if it is running.
-          </p>
-        </div>
-        <BackendStatus />
-      </div>
-    </main>
+    <>
+      <Hero />
+      <WhatYouGet />
+      <Trainer />
+      <Journey />
+      <OnePromise />
+      <Results />
+      <Courses />
+      <TeamCall />
+      <Consultation />
+      <PersonalTraining />
+      <HowToStart />
+      <Faq />
+    </>
   );
 }
