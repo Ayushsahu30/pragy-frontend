@@ -5,10 +5,9 @@ import { useState } from "react";
 import { CloseIcon, MenuIcon } from "@/components/icons";
 import AccountButton from "@/components/layout/AccountButton";
 import { buttonClass } from "@/components/ui";
-import type { CurrentUser } from "@/lib/auth";
 import { navLinks, site } from "@/content/site";
 
-export default function SiteHeader({ user }: { user: CurrentUser | null }) {
+export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rust";
 
@@ -37,7 +36,7 @@ export default function SiteHeader({ user }: { user: CurrentUser | null }) {
           <Link href="/#start" className={buttonClass("dark", "min-h-[48px] px-6 max-md:hidden")}>
             Book a call
           </Link>
-          <AccountButton user={user} />
+          <AccountButton />
           <button
             type="button"
             aria-label={menuOpen ? "Close menu" : "Open menu"}

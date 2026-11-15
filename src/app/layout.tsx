@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
-import SiteFooter from "@/components/layout/SiteFooter";
-import SiteHeader from "@/components/layout/SiteHeader";
 import { site } from "@/content/site";
-import { getCurrentUser } from "@/lib/auth";
 import "./globals.css";
 
 // Heading font
@@ -38,9 +35,9 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const user = await getCurrentUser();
-
+// Shared by every page. Site pages add the header and footer in (site)/layout.tsx;
+// login pages and the dashboard have their own layouts.
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-white font-sans text-[17px] leading-[1.6] text-ink">
@@ -50,11 +47,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <SiteHeader user={user} />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
+        {children}
       </body>
     </html>
   );
