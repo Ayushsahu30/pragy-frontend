@@ -20,7 +20,7 @@ export default function Courses() {
             <Eyebrow>01 — The Starter Guide</Eyebrow>
             <h3 className="m-0 mb-1 mt-0.5 font-serif text-[34px] font-medium leading-[1.1]">PDF Course</h3>
             <p className="m-0 text-[15px] text-ink-soft">
-              A practical introduction to my approach to looksmaxing. Structured educational guide · Learn at your own
+              A practical introduction to my approach to maximizing your looks. Structured educational guide · Learn at your own
               pace · Read inside your private course dashboard · 30-day access.
             </p>
           </div>

@@ -49,7 +49,7 @@ export const products = {
     metaTitle: "PDF Course: The Starter Guide",
     eyebrow: "01 — The Starter Guide",
     title: "PDF Course",
-    intro: "A practical introduction to my approach to looksmaxing.",
+    intro: "A practical introduction to my approach to maximizing your looks.",
     includesTitle: "What you get",
     includes: [
       "Structured educational guide",

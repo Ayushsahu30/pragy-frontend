@@ -10,7 +10,7 @@ export const site = {
   /** Short line under the tagline in the footer. */
   motto: "Education. Structure. Consistency.",
   description:
-    "A structured approach to looksmaxing with Pragy Gurjar: physique, facial aesthetics, skin, hair, grooming, nutrition, posture and style.",
+    "A structured approach to maximizing your looks with Pragy Gurjar: physique, facial aesthetics, skin, hair, grooming, nutrition, posture and style.",
 
   /** Name as shown on the site. */
   trainerName: "Pragy",

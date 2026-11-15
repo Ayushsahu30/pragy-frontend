@@ -39,19 +39,20 @@ export default function Hero() {
             id="hero-title"
             className="m-0 font-serif text-[clamp(52px,6.6vw,96px)] font-medium leading-[0.98] tracking-[-0.01em]"
           >
-            Look better. <em>With a plan.</em>
+            I help people look their <em>best.</em>
           </h1>
           <p className="m-0 max-w-[560px] text-[19px] text-ink-soft">
-            A structured approach to looksmaxing. Your appearance is made up of more than one thing. Your physique,
-            facial aesthetics, skin, hair, grooming, posture and personal style all play a role.
+            I’m {site.trainerName}, and I help people improve their overall appearance through a structured,
+            personalized approach to maximizing your looks.
           </p>
           <p className="m-0 max-w-[560px] text-[19px] text-ink-soft">
-            I’m {site.trainerName}. I help you understand what needs improvement, what deserves your attention first,
-            and how to approach it with a structured plan.
+            Our approach covers every major aspect of your appearance, including facial aesthetics, physique, skin
+            health, hair, grooming, posture, and personal style.
           </p>
           <p className="m-0 max-w-[560px] text-[19px] text-ink-soft">
-            Whether you’re starting from scratch or looking to refine what you’ve already built, I’ll help you find the
-            right direction. {site.stats.followers} people follow my work.
+            We start by identifying the areas with the greatest potential for improvement, then build a personalized
+            strategy to help you work on them systematically. From understanding what needs attention to implementing
+            the right changes, we guide you through the process of improving your appearance.
           </p>
           <div className="mt-2 flex flex-wrap gap-3">
             <ButtonLink href="#courses" variant="outline">
@@ -69,7 +70,7 @@ export default function Hero() {
             {examples.map((example) => (
               <li
                 key={example.title}
-                className={`relative flex min-h-[240px] flex-col justify-end gap-1 rounded-3xl p-5.5 ${example.card}`}
+                className={`relative flex min-h-[240px] flex-col justify-end gap-1 rounded-3xl p-5.5 pt-14 ${example.card}`}
               >
                 <span
                   aria-hidden="true"
