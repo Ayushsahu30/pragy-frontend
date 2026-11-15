@@ -8,27 +8,39 @@ const team = formatINR(prices.teamCall.amount);
 const questions = [
   {
     q: "Where should I start?",
-    a: `If you are unsure, book the ${team} discovery call. My team will point you to the right course or plan.`,
+    a: `If you’re unsure, book the ${team} discovery session. My team will understand your goals and recommend the most suitable starting point.`,
   },
   {
-    q: `Is the ${team} call refundable?`,
-    a: "Yes. If you decide not to join after the call, it is refunded in full. If you join, it comes off the price.",
+    q: `Is the ${team} discovery session refundable?`,
+    a: "Yes. If you decide not to join a programme, the entire amount is refunded. Ask for the refund on WhatsApp within 15 days of booking. If you join, the payment is adjusted against your programme price.",
   },
   {
-    q: `Is the ${formatINR(prices.consultation.amount)} call refundable?`,
-    a: "No. The 1-on-1 call with me is not refundable.",
+    q: `Is the ${formatINR(prices.consultation.amount)} private consultation refundable?`,
+    a: "No. This is a separate, non-refundable 30-minute consultation directly with Pragy.",
   },
   {
-    q: "Can you help me lose weight or gain weight?",
-    a: "Yes. Fat loss, weight gain and building muscle are a big part of what I teach, along with diet, skin, grooming and posture.",
+    q: "Can I get a refund on anything else?",
+    a: "No. Only the discovery session is refundable. Courses, the private consultation and coaching plans are non-refundable. A webinar is refunded only if it is cancelled.",
   },
   {
-    q: "How long do I keep the PDF course?",
-    a: "You get 30 days of access from the day you buy it.",
+    q: "Can you help with both weight loss and muscle gain?",
+    a: "Yes. Physique and body composition are among the areas covered through personalised coaching.",
   },
   {
-    q: `What is in the ${formatINR(prices.videoCourse.amount)} course?`,
-    a: "My full video course and my Skool community, plus member-only extras.",
+    q: "How long do I get access to the PDF course?",
+    a: "The PDF course comes with 30 days of access.",
+  },
+  {
+    q: `What is included in the ${formatINR(prices.videoCourse.amount)} course?`,
+    a: "The complete video course, access to the Skool community and additional member resources.",
+  },
+  {
+    q: "Do I need personal coaching to improve my appearance?",
+    a: "No. You can start with the self-paced courses. Personal coaching is for people who want individualised guidance and ongoing support.",
+  },
+  {
+    q: "How do I apply for personal coaching?",
+    a: "Complete the application form on this website. You’ll be redirected to WhatsApp to send your details to my team.",
   },
 ];
 
@@ -38,7 +50,7 @@ export default function Faq() {
       <div className="flex min-w-0 flex-[1_1_280px] flex-col gap-4">
         <Eyebrow>FAQ</Eyebrow>
         <h2 className={sectionTitleClass}>
-          Questions, <em>answered.</em>
+          Frequently asked <em>questions.</em>
         </h2>
       </div>
       <div className="flex min-w-0 flex-[2_1_480px] flex-col border-b border-sand">

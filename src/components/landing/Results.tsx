@@ -2,43 +2,29 @@ import { ArrowRightIcon } from "@/components/icons";
 import { Eyebrow, PhotoPlaceholder, Section, sectionTitleClass } from "@/components/ui";
 import { site } from "@/content/site";
 
-const process = ["Understand where you are", "Build your plan", "Guide you through it"];
-
-// TODO(client): Gaurav's time frame and words, then two more clients.
+// TODO(client): duration, verified areas and testimonial for each client.
 const featured = {
   name: "Gaurav",
-  summary: "[Time taken] · Face, posture, oral health and body composition",
-  quote: "[His result, in his own words. One or two lines.]",
+  summary: "[Duration of coaching] · Areas worked on: [Verified areas]",
+  quote: "[Actual client testimonial.]",
 };
 
-const moreClients = ["Client name", "Client name"];
+const moreClients = ["Client Name", "Client Name"];
 
 export default function Results() {
   return (
     <Section id="results" label="Client transformations" className="bg-cream" innerClassName="flex flex-col gap-12">
       <div className="flex flex-col gap-4">
-        <Eyebrow>Client results</Eyebrow>
+        <Eyebrow>Real people. Real progress.</Eyebrow>
         <h2 className={`${sectionTitleClass} max-w-[760px]`}>
-          How I help clients <em>transform.</em>
+          The results of having a structured <em>approach.</em>
         </h2>
       </div>
 
-      <ol className="m-0 flex list-none flex-wrap gap-3 p-0">
-        {process.map((step, index) => (
-          <li
-            key={step}
-            className="inline-flex items-center gap-2.5 rounded-full border border-line bg-white py-2.5 pl-2.5 pr-5 text-[15px] font-semibold"
-          >
-            <span
-              aria-hidden="true"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-peach text-sm font-bold"
-            >
-              {index + 1}
-            </span>
-            {step}
-          </li>
-        ))}
-      </ol>
+      <p className="m-0 max-w-[640px] text-[19px] text-ink-soft">
+        Everyone starts from a different place. The objective is to understand what needs improvement and work
+        consistently towards it.
+      </p>
 
       <article className="flex flex-wrap items-center gap-x-12 gap-y-7 rounded-[28px] border border-line bg-white p-5 sm:p-7">
         <div className="grid min-w-0 flex-[1.2_1_340px] grid-cols-2 gap-2.5">
@@ -66,8 +52,8 @@ export default function Results() {
             </div>
             <div className="min-w-0 flex-[1_1_200px]">
               <h3 className="m-0 font-serif text-[30px] font-medium leading-[1.1]">[{client}]</h3>
-              <span className="text-sm font-semibold text-rust">[Time taken] · [What changed]</span>
-              <p className="m-0 mt-2 text-[15px] text-ink-soft">[Their result, in their own words.]</p>
+              <span className="text-sm font-semibold text-rust">[Duration of coaching] · Areas worked on: [Verified areas]</span>
+              <p className="m-0 mt-2 text-[15px] text-ink-soft">“[Actual client testimonial.]”</p>
             </div>
           </li>
         ))}
@@ -79,7 +65,7 @@ export default function Results() {
         rel="noopener noreferrer"
         className="inline-flex w-fit items-center gap-2 rounded py-2 font-semibold text-ink underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rust"
       >
-        More results on my Instagram @{site.instagram.handle}
+        More transformations and client experiences on Instagram @{site.instagram.handle}
         <ArrowRightIcon />
       </a>
     </Section>

@@ -4,26 +4,32 @@ import { prices } from "@/content/prices";
 import { formatINR } from "@/lib/format";
 
 const points = [
-  "A private call, just you and me",
-  "Pick your time slot, then pay",
-  "Advice for your body, routine and goal",
+  "Your current physique and appearance goals.",
+  "Your skincare, grooming and lifestyle routine.",
+  "Areas you want to improve.",
+  "What I would prioritise in your situation.",
+  "Your next steps.",
 ];
 
 export default function Consultation() {
   return (
     <Section
       id="one-on-one"
-      label="1-on-1 call with Pragy"
+      label="Private consultation with Pragy"
       className="bg-cream"
       innerClassName="flex flex-col items-center gap-10 text-center"
     >
       <div className="flex flex-col items-center gap-4">
-        <Eyebrow>Talk to me directly</Eyebrow>
+        <Eyebrow>Direct access to Pragy</Eyebrow>
         <h2 className={`${sectionTitleClass} max-w-[820px]`}>
-          Want to talk to me <em>directly?</em>
+          Want my personal <em>advice?</em>
         </h2>
         <p className="m-0 max-w-[600px] text-[19px] text-ink-soft">
-          Book a private 30-minute call with me and get direct advice for your situation.
+          Sometimes you don’t need an entire coaching programme. You just need an experienced perspective on your
+          current situation.
+        </p>
+        <p className="m-0 max-w-[600px] text-[19px] text-ink-soft">
+          Book a private 30-minute consultation with me. During the session, we can discuss:
         </p>
       </div>
 
@@ -43,17 +49,17 @@ export default function Consultation() {
             <span className="inline-block rounded-full bg-peach px-4 py-2 text-[13px] font-semibold">Non-refundable</span>
           </div>
           <span className="text-sm text-ink-soft">
-            {prices.consultation.gst === "extra" && "+ GST · "}30 minutes · 1-on-1 with me
+            {prices.consultation.gst === "extra" && "+ GST · "}30 minutes · Private 1-on-1 session
           </span>
           <ButtonLink href="/consultation" className="self-stretch">
-            Book my 1-on-1 call
+            Book a Private Session
           </ButtonLink>
         </div>
       </div>
 
       <p className="m-0 max-w-[620px] text-[15px] text-ink-soft">
-        Please note: this call is not refundable. If you are still unsure, start with the{" "}
-        {formatINR(prices.teamCall.amount)} discovery call instead.
+        This session is non-refundable. If you’re unsure whether you need personal guidance, start with the
+        refundable discovery session.
       </p>
     </Section>
   );

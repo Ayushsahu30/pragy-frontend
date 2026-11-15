@@ -1,11 +1,6 @@
 import PtApplyButton from "@/components/landing/PtApplyButton";
 import { Eyebrow, PhotoPlaceholder } from "@/components/ui";
 
-const steps = [
-  "Tap “Apply for personal training”",
-  "Fill in the short form that opens",
-  "WhatsApp opens with your message ready. Just press send",
-];
 
 /**
  * Personal training. No prices here on purpose: the team shares them on
@@ -18,34 +13,30 @@ export default function PersonalTraining({ asPage = false }: { asPage?: boolean 
   return (
     <section
       id="personal-training"
-      aria-label="Personal training"
+      aria-label="Personal coaching"
       className="scroll-mt-28 bg-ink px-6 py-20 text-white md:py-26"
     >
       <div className="mx-auto flex max-w-[1200px] flex-wrap items-center gap-x-16 gap-y-12">
         <div className="flex min-w-0 flex-[1.1_1_360px] flex-col items-start gap-6">
-          <Eyebrow className="text-peach">Personal training</Eyebrow>
+          <Eyebrow className="text-peach">Personal coaching</Eyebrow>
           <Heading className="m-0 font-serif text-[clamp(40px,5vw,64px)] font-medium leading-[1.04] tracking-[-0.01em]">
-            Want me to train you <em className="text-peach">personally?</em>
+            A plan built around you. <em className="text-peach">Guidance throughout the process.</em>
           </Heading>
           <p className="m-0 max-w-[560px] text-[19px] text-mist">
-            Personal training with me is by application. Fill in a short form and WhatsApp opens with your message
-            ready to send to my team.
+            If you’re serious about improving your appearance and want ongoing personal guidance, you can apply to work
+            with me.
           </p>
-          <ol className="m-0 flex list-none flex-col gap-3.5 p-0 text-base leading-[1.4]">
-            {steps.map((step, index) => (
-              <li key={step} className="flex items-center gap-3.5">
-                <span
-                  aria-hidden="true"
-                  className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-ink-deep text-[15px] font-bold text-peach"
-                >
-                  {index + 1}
-                </span>
-                {step}
-              </li>
-            ))}
-          </ol>
+          <p className="m-0 max-w-[560px] text-[19px] text-mist">
+            This isn’t a generic routine sent to everyone. The approach is built around your current situation, goals,
+            lifestyle and progress.
+          </p>
+          <p className="m-0 max-w-[560px] text-[19px] text-mist">
+            Depending on your requirements, coaching may include personalised physique and training guidance, nutrition
+            and dietary planning, skincare and hair care routines, appearance and grooming recommendations, progress
+            reviews and plan adjustments, and ongoing guidance and accountability.
+          </p>
           <PtApplyButton />
-          <span className="text-sm text-mist">No payment at this step. My team replies on WhatsApp with the plan details.</span>
+          <span className="text-sm text-mist">Applying is free. There is no payment at this stage.</span>
         </div>
 
         <div className="flex min-w-0 flex-[1_1_360px] flex-col gap-3.5">
@@ -54,7 +45,7 @@ export default function PersonalTraining({ asPage = false }: { asPage?: boolean 
             label="Video of Pragy"
             className="aspect-[4/5] max-h-[620px] w-full rounded-b-[28px] rounded-t-[220px]"
           />
-          <span className="text-sm text-mist">Watch me explain how personal training works.</span>
+          <span className="text-sm text-mist">Watch: How my personal coaching works.</span>
         </div>
       </div>
     </section>

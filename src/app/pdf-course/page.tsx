@@ -4,7 +4,7 @@ import { products } from "@/content/products";
 
 const product = products.pdfCourse;
 
-export const metadata: Metadata = { title: product.title, description: product.intro };
+export const metadata: Metadata = { title: product.metaTitle, description: product.intro };
 
 export default function PdfCoursePage() {
   return <ProductPage product={product} />;

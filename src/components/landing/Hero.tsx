@@ -1,29 +1,29 @@
 import { ButtonLink, Eyebrow } from "@/components/ui";
 import { site } from "@/content/site";
 
-// "Some examples of what we help with" cards, from the Version D design.
+// "What we work on" cards: client's wording, Version D card style.
 const examples = [
   {
-    title: "Physique",
-    text: "Example: fat loss, weight gain or muscle, with a training plan matched to your body and goal.",
+    title: "Physique & Nutrition",
+    text: "Fat loss, muscle development, weight management, training and personalised nutrition built around your body and goals.",
     card: "bg-peach text-ink",
     muted: "text-ink-soft",
   },
   {
-    title: "Nutrition",
-    text: "Example: a diet plan you can follow with normal home food.",
+    title: "Facial Aesthetics",
+    text: "Facial proportions, facial fat, appearance-related habits and realistic approaches to improving your facial presentation.",
     card: "bg-ink text-white",
     muted: "text-mist",
   },
   {
-    title: "Grooming and skin",
-    text: "Example: a simple daily routine for skin, hair and beard.",
+    title: "Skin, Hair & Grooming",
+    text: "Skincare, hair care, beard grooming and the everyday details that influence how you present yourself.",
     card: "border border-ink bg-cream text-ink",
     muted: "text-ink-soft",
   },
   {
-    title: "Style and presence",
-    text: "Example: clothes, posture and habits that make you look sharper.",
+    title: "Posture, Style & Presence",
+    text: "Posture, clothing, sleep and lifestyle habits that help you look and carry yourself better.",
     card: "bg-sand text-ink",
     muted: "text-ink-soft",
   },
@@ -34,30 +34,37 @@ export default function Hero() {
     <section aria-labelledby="hero-title" className="px-6 pb-20 pt-12 md:pb-26 md:pt-18">
       <div className="mx-auto flex max-w-[1200px] flex-wrap items-center gap-x-16 gap-y-12">
         <div className="flex min-w-0 flex-[1.1_1_380px] flex-col items-start gap-6">
-          <Eyebrow>What I do</Eyebrow>
+          <Eyebrow>{site.name}</Eyebrow>
           <h1
             id="hero-title"
             className="m-0 font-serif text-[clamp(52px,6.6vw,96px)] font-medium leading-[0.98] tracking-[-0.01em]"
           >
-            I help people look their <em>best.</em>
+            Look better. <em>With a plan.</em>
           </h1>
           <p className="m-0 max-w-[560px] text-[19px] text-ink-soft">
-            I’m {site.trainerName}, and looksmaxing is what I do. On this website you can book a 1-on-1 session with
-            me, take my courses, be part of my community, or get personal coaching.
+            A structured approach to looksmaxing. Your appearance is made up of more than one thing. Your physique,
+            facial aesthetics, skin, hair, grooming, posture and personal style all play a role.
           </p>
           <p className="m-0 max-w-[560px] text-[19px] text-ink-soft">
-            I show you what to work on first and guide you until the change is visible. More than{" "}
-            {site.stats.followers.replace("+", "")} people follow my work.
+            I’m {site.trainerName}. I help you understand what needs improvement, what deserves your attention first,
+            and how to approach it with a structured plan.
+          </p>
+          <p className="m-0 max-w-[560px] text-[19px] text-ink-soft">
+            Whether you’re starting from scratch or looking to refine what you’ve already built, I’ll help you find the
+            right direction. {site.stats.followers} people follow my work.
           </p>
           <div className="mt-2 flex flex-wrap gap-3">
             <ButtonLink href="#courses" variant="outline">
-              See courses
+              Explore Courses
+            </ButtonLink>
+            <ButtonLink href="#personal-training" variant="outline">
+              Work With Me
             </ButtonLink>
           </div>
         </div>
 
         <div className="flex min-w-0 flex-[1_1_380px] flex-col gap-3.5">
-          <p className="m-0 text-[15px] font-semibold">Some examples of what I help with</p>
+          <p className="m-0 text-[15px] font-semibold">What we work on: a complete approach to improving your appearance.</p>
           <ul className="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-3.5 p-0">
             {examples.map((example) => (
               <li

@@ -3,6 +3,8 @@ import { site } from "@/content/site";
 
 /** Text for each product's sales page. Prices come from prices.ts. */
 export type Product = {
+  /** Browser tab title. */
+  metaTitle: string;
   eyebrow: string;
   title: string;
   intro: string;
@@ -17,12 +19,15 @@ export type Product = {
 
 // Buying is built in Phase 4. Until then, "Buy" buttons go to the login page.
 const buyHref = "/login";
+const team = `₹${prices.teamCall.amount}`;
 
 export const products = {
+  // Reached only from ad links; not linked from the landing page.
   webinar: {
+    metaTitle: "Webinar with Pragy",
     eyebrow: "Live webinar",
     title: "Webinar with Pragy",
-    intro: "A live online session with me. Learn what to work on first for your body and your look, and ask me your questions live.",
+    intro: "A live online session with me. Learn what to work on first for your appearance, and ask me your questions live.",
     includesTitle: "What you get",
     includes: [
       "A live session with me",
@@ -31,77 +36,97 @@ export const products = {
     ],
     price: prices.webinar,
     priceLabel: "Webinar seat",
-    priceNotes: site.nextWebinar
-      ? [`Next session: ${site.nextWebinar.date}, ${site.nextWebinar.time}.`]
-      : ["The next date will be announced soon."],
+    priceNotes: [
+      site.nextWebinar
+        ? `Next session: ${site.nextWebinar.date}, ${site.nextWebinar.time}.`
+        : "The next date will be announced soon.",
+      "Non-refundable, unless the webinar is cancelled.",
+    ],
     cta: { label: site.nextWebinar ? "Book my seat" : "Log in to get notified", href: buyHref },
   },
 
   pdfCourse: {
-    eyebrow: "Self-paced course",
+    metaTitle: "PDF Course: The Starter Guide",
+    eyebrow: "01 — The Starter Guide",
     title: "PDF Course",
-    intro: "My entry-level looksmaxing guide, read inside a secure viewer on your phone or laptop.",
+    intro: "A practical introduction to my approach to looksmaxing.",
     includesTitle: "What you get",
     includes: [
-      "My full PDF course",
-      "Access right after payment, in your private dashboard",
-      "30 days of access from the day you buy",
+      "Structured educational guide",
+      "Learn at your own pace",
+      "Read inside your private course dashboard",
+      "30-day access",
     ],
     price: prices.pdfCourse,
-    priceLabel: "One-time payment",
-    priceNotes: ["30 days of access.", "Read on this website only. Downloading is not available."],
-    cta: { label: "Get the PDF course", href: buyHref },
+    priceLabel: "The Starter Guide",
+    priceNotes: ["Course access is unlocked in your private dashboard after successful payment.", "Non-refundable."],
+    cta: { label: "Get the Starter Guide", href: buyHref },
   },
 
   videoCourse: {
-    eyebrow: "Video course + community",
+    metaTitle: "Video Course + Community",
+    eyebrow: "02 — The Complete Experience",
     title: "Video Course + Community",
-    intro: "My full video course and my Skool community, plus member-only extras on this website.",
+    intro: "Go beyond reading. Learn through detailed video lessons and become part of the community.",
     includesTitle: "What you get",
     includes: [
-      "My full video course",
+      "Full video course",
+      "Structured educational modules",
       "Access to my Skool community",
-      "A Community Member badge on this website, which unlocks extra material",
+      "Member-only resources and extras",
+      "Learn at your own pace",
     ],
     price: prices.videoCourse,
-    priceLabel: "Course + community",
-    priceNotes: ["You join and pay on Skool."],
+    priceLabel: "The Complete Experience",
+    priceNotes: ["Course access is unlocked in your private dashboard after successful payment.", "Non-refundable."],
     cta: site.skoolUrl
-      ? { label: "Join on Skool", href: site.skoolUrl, external: true }
-      : { label: "Joining opens soon", href: "/#courses" },
+      ? { label: "Join the Community", href: site.skoolUrl, external: true }
+      : { label: "Join the Community", href: buyHref },
   },
 
   teamCall: {
-    eyebrow: "Still confused?",
-    title: "Not sure where to start?",
-    intro: "Talk to my team. They look at your goal and tell you exactly where you should begin.",
-    includesTitle: "On the call",
+    metaTitle: "Discovery session",
+    eyebrow: "Not sure where to start?",
+    title: "Let’s figure that out first.",
+    intro:
+      "Not everyone needs the same approach. Book a discovery session with my team. We’ll understand your goals, assess where you currently stand and help you identify the right course or coaching option.",
+    includesTitle: "In the session",
     includes: [
-      "My team points you to the right place: which course or plan fits you",
-      "Not joining? Money back, refunded in full",
-      "Joining? It counts: the call fee comes off the price",
+      "Discuss your appearance goals.",
+      "Understand which areas need attention.",
+      "Get a recommendation on where to start.",
     ],
     price: prices.teamCall,
-    priceLabel: "Discovery call",
-    priceNotes: ["100% refundable if you decide not to join.", "If you join, it comes off the price."],
-    cta: { label: "Book my call", href: buyHref },
+    priceLabel: "Discovery session",
+    priceNotes: [
+      "100% refundable if you decide not to join.",
+      `If you decide to join one of our programmes, your ${team} payment is adjusted against the programme price.`,
+      "If you decide not to proceed, you receive a full refund. Ask for it on WhatsApp within 15 days of booking.",
+    ],
+    cta: { label: "Book Your Discovery Session", href: buyHref },
     ctaNote: "Pick your time slot, then pay.",
   },
 
   consultation: {
-    eyebrow: "Talk to me directly",
-    title: "1-on-1 call with me",
-    intro: "Book a private 30-minute call with me and get direct advice for your situation.",
-    includesTitle: "What you get",
+    metaTitle: "Private consultation with Pragy",
+    eyebrow: "Direct access to Pragy",
+    title: "Want my personal advice?",
+    intro:
+      "Sometimes you don’t need an entire coaching programme. You just need an experienced perspective on your current situation. Book a private 30-minute consultation with me.",
+    includesTitle: "During the session, we can discuss",
     includes: [
-      "A private call, just you and me",
-      "Pick your time slot, then pay",
-      "Advice for your body, routine and goal",
+      "Your current physique and appearance goals.",
+      "Your skincare, grooming and lifestyle routine.",
+      "Areas you want to improve.",
+      "What I would prioritise in your situation.",
+      "Your next steps.",
     ],
     price: prices.consultation,
-    priceLabel: "1-on-1 call · 30 min",
-    priceNotes: ["A one-time call. Every person books it once.", "This call is not refundable."],
-    cta: { label: "Book my 1-on-1 call", href: buyHref },
+    priceLabel: "30 minutes · Private 1-on-1 session",
+    priceNotes: [
+      "This session is non-refundable. If you’re unsure whether you need personal guidance, start with the refundable discovery session.",
+    ],
+    cta: { label: "Book a Private Session", href: buyHref },
     ctaNote: "Pick your time slot, then pay.",
   },
 } satisfies Record<string, Product>;

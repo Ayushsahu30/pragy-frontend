@@ -11,13 +11,17 @@ type Application = {
   email: string;
   height: string;
   weight: string;
+  improve: string[];
 };
+
+/** Options for "Things you want to improve". Pick one or more. */
+const improveOptions = ["Jawline", "Face fat", "Hair", "Overall appearance"];
 
 /** The message WhatsApp opens with. */
 function buildMessage(a: Application): string {
   return (
     `Hi, I am ${a.name}, age ${a.age}, height ${a.height} cm, weight ${a.weight} kg. ` +
-    `My email is ${a.email}. I am looking for looksmaxing personal training.`
+    `My email is ${a.email}. I want to improve: ${a.improve.join(", ")}. I would like to apply for personal coaching.`
   );
 }
 
@@ -53,7 +57,13 @@ export default function PtApplyButton({ className = "" }: { className?: string }
       email: read("email"),
       height: read("height"),
       weight: read("weight"),
+      improve: data.getAll("improve").map(String),
     };
+
+    if (application.improve.length === 0) {
+      setError("Please choose at least one thing you want to improve.");
+      return;
+    }
 
     if (!site.whatsappNumber) {
       setError("Applications open soon. Please check back in a little while.");
@@ -67,7 +77,7 @@ export default function PtApplyButton({ className = "" }: { className?: string }
   }
 
   const fields: {
-    name: keyof Application;
+    name: Exclude<keyof Application, "improve">;
     label: string;
     type: string;
     autoComplete?: string;
@@ -87,7 +97,7 @@ export default function PtApplyButton({ className = "" }: { className?: string }
     <>
       <button type="button" onClick={open} className={buttonClass("peach", `cursor-pointer border-0 font-sans ${className}`)}>
         <ChatIcon />
-        Apply for personal training
+        Apply for Personal Coaching
       </button>
 
       <dialog
@@ -100,7 +110,7 @@ export default function PtApplyButton({ className = "" }: { className?: string }
             <div className="flex flex-col gap-1">
               <span className="text-xs font-semibold uppercase tracking-[0.18em] text-rust">Takes under a minute</span>
               <h3 id={`${id}-title`} className="m-0 font-serif text-[36px] font-medium leading-[1.1]">
-                Personal training application
+                Personal coaching application
               </h3>
             </div>
             <button
@@ -134,6 +144,23 @@ export default function PtApplyButton({ className = "" }: { className?: string }
               </div>
             ))}
 
+            <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
+              <legend className="mb-1.5 p-0 text-sm font-semibold">
+                Things you want to improve <span className="font-normal text-ink-soft">(choose one or more)</span>
+              </legend>
+              <div className="grid grid-cols-2 gap-2">
+                {improveOptions.map((option) => (
+                  <label
+                    key={option}
+                    className="flex min-h-[48px] cursor-pointer items-center gap-2.5 rounded-[14px] border border-field bg-white px-3.5 text-[15px] has-[:checked]:border-ink has-[:checked]:bg-peach has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-1 has-[:focus-visible]:outline-rust"
+                  >
+                    <input type="checkbox" name="improve" value={option} className="h-4.5 w-4.5 flex-none accent-ink" />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
             {error && (
               <p role="alert" className="m-0 rounded-2xl bg-cream p-3.5 text-sm text-rust-dark">
                 {error}
@@ -148,8 +175,8 @@ export default function PtApplyButton({ className = "" }: { className?: string }
           <div className="flex flex-col gap-2">
             <span className="text-[13px] font-semibold text-ink-soft">WhatsApp opens with a message like</span>
             <p className="m-0 rounded-[4px_18px_18px_18px] bg-peach px-4.5 py-4 text-[15px] leading-[1.5]">
-              Hi, I am [Name], age [Age], height [Height] cm, weight [Weight] kg. My email is [Email]. I am looking for
-              looksmaxing personal training.
+              Hi, I am [Name], age [Age], height [Height] cm, weight [Weight] kg. My email is [Email]. I want to
+              improve: [Your choices]. I would like to apply for personal coaching.
             </p>
             <span className="text-[13px] text-ink-soft">Your details are shared with my team so they can contact you.</span>
           </div>

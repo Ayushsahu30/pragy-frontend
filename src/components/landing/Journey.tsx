@@ -2,23 +2,39 @@ import { Eyebrow, PhotoPlaceholder, Section, sectionTitleClass } from "@/compone
 
 // TODO(client): add the month and year of each photo; empty dates are hidden.
 const steps = [
-  { date: "", title: "Where I started", text: "I was overweight, so I started going to the gym." },
-  { date: "", title: "First changes", text: "I lost the weight, but my face had not changed yet." },
-  { date: "", title: "Halfway", text: "I started working on my skin, grooming and posture too." },
-  { date: "", title: "Today", text: "I now teach the same method to others." },
+  {
+    date: "",
+    title: "The Starting Point",
+    text: "I was overweight. My first step was getting into the gym and taking control of my physique.",
+  },
+  {
+    date: "",
+    title: "Building My Physique",
+    text: "I started losing weight and developing a better understanding of training and nutrition.",
+  },
+  {
+    date: "",
+    title: "Understanding Looksmaxing",
+    text: "I realised that physique was only one part of the equation. I began paying attention to skin, grooming, facial aesthetics and posture.",
+  },
+  {
+    date: "",
+    title: "What I Do Today",
+    text: "I now use that knowledge to educate others and help them approach their own appearance goals with a structured plan.",
+  },
 ];
 
 export default function Journey() {
   return (
-    <Section id="journey" label="Trainer transformation" innerClassName="flex flex-col gap-14">
+    <Section id="journey" label="My transformation" innerClassName="flex flex-col gap-14">
       <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-4">
         <div className="flex flex-col gap-4">
-          <Eyebrow>My own journey</Eyebrow>
+          <Eyebrow>My transformation</Eyebrow>
           <h2 className={`${sectionTitleClass} max-w-[760px]`}>
-            My transformation <em>over time.</em>
+            I started by working on <em>myself.</em>
           </h2>
         </div>
-        <p className="m-0 max-w-[360px] text-ink-soft">I followed the same method I now teach.</p>
+        <p className="m-0 max-w-[360px] text-ink-soft">The approach I teach today developed through my own journey.</p>
       </div>
 
       <ol className="m-0 flex list-none flex-col p-0">

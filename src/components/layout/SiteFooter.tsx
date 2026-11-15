@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { InstagramIcon, ShieldIcon } from "@/components/icons";
+import { InstagramIcon, ShieldIcon, YouTubeIcon } from "@/components/icons";
 import { legalLinks, site } from "@/content/site";
 
 export default function SiteFooter() {
@@ -11,7 +11,9 @@ export default function SiteFooter() {
         <div className="flex flex-wrap items-start justify-between gap-x-14 gap-y-7">
           <div className="flex flex-col gap-2">
             <div className="font-serif text-[34px] font-semibold leading-[1.1]">{site.name}</div>
-            <p className="m-0 max-w-[320px] text-[15px] text-mist">{site.tagline}</p>
+            <p className="m-0 max-w-[320px] text-[15px] text-mist">
+              {site.tagline} {site.motto}
+            </p>
             <a
               href={site.instagram.url}
               target="_blank"
@@ -20,10 +22,25 @@ export default function SiteFooter() {
             >
               <InstagramIcon />@{site.instagram.handle}
             </a>
+            <a
+              href={site.youtube.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`inline-flex w-fit items-center gap-2 rounded py-2 text-[15px] font-medium text-white no-underline hover:text-peach ${focus}`}
+            >
+              <YouTubeIcon />
+              YouTube: @{site.youtube.handle}
+            </a>
+            <a
+              href={`mailto:${site.supportEmail}`}
+              className={`inline-flex w-fit items-center gap-2 rounded py-2 text-[15px] font-medium text-white no-underline hover:text-peach ${focus}`}
+            >
+              {site.supportEmail}
+            </a>
           </div>
           <nav aria-label="Legal">
             <ul className="m-0 flex list-none flex-wrap gap-x-8 gap-y-1 p-0 text-[15px] font-medium">
-              {legalLinks.map((link) => (
+              {[{ href: "/#courses", label: "Courses" }, ...legalLinks].map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className={`inline-block rounded py-3 text-white no-underline hover:text-peach ${focus}`}>
                     {link.label}
@@ -40,7 +57,7 @@ export default function SiteFooter() {
         </p>
 
         <div className="border-t border-ink-deep pt-6 text-sm text-mist">
-          © {site.copyrightYear} {site.name}. All rights reserved.
+          © {site.copyrightYear} {site.fullName}. All rights reserved.
         </div>
       </div>
     </footer>

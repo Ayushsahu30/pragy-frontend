@@ -31,6 +31,13 @@ export default function ContactPage() {
         </a>
       </p>
 
+      <h2>YouTube</h2>
+      <p>
+        <a href={site.youtube.url} target="_blank" rel="noopener noreferrer">
+          @{site.youtube.handle}
+        </a>
+      </p>
+
       <h2>Business details</h2>
       <p>
         {orPlaceholder(site.businessName, "Business name")}

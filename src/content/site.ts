@@ -5,16 +5,24 @@
  */
 export const site = {
   name: "Pragy",
-  tagline: "I help people look their best.",
+  fullName: "Pragy Gurjar",
+  tagline: "Look better. With a plan.",
+  /** Short line under the tagline in the footer. */
+  motto: "Education. Structure. Consistency.",
   description:
-    "Pragy helps people look their best: courses, community, 1-on-1 calls and personal coaching for fat loss, weight gain, diet, skin and grooming.",
+    "A structured approach to looksmaxing with Pragy Gurjar: physique, facial aesthetics, skin, hair, grooming, nutrition, posture and style.",
 
-  /** Lead trainer's name as shown on the site. */
+  /** Name as shown on the site. */
   trainerName: "Pragy",
 
   instagram: {
     handle: "itspragygurjar",
     url: "https://www.instagram.com/itspragygurjar/",
+  },
+
+  youtube: {
+    handle: "itspragygurjar",
+    url: "https://www.youtube.com/@itspragygurjar",
   },
 
   /** Numbers shown in the hero. Empty ones are hidden. */
@@ -25,10 +33,10 @@ export const site = {
   },
 
   /** Team WhatsApp number, country code first, digits only, e.g. "919876543210". */
-  whatsappNumber: "", // TODO(client)
+  whatsappNumber: "919343892309",
 
   /** Details for the contact and legal pages. */
-  supportEmail: "", // TODO(client)
+  supportEmail: "workpragygurjar@gmail.com",
   businessName: "", // TODO(client): registered business name
   businessAddress: "", // TODO(client)
   courtCity: "", // TODO(client): city for legal disputes
@@ -47,12 +55,12 @@ export const site = {
 
 /** Main menu. Links start with "/" so they also work from other pages. */
 export const navLinks = [
-  { href: "/#trainer", label: "About me" },
+  { href: "/#trainer", label: "About" },
   { href: "/#results", label: "Results" },
   { href: "/#courses", label: "Courses" },
   { href: "/#start", label: "Where to start" },
-  { href: "/#one-on-one", label: "1-on-1 call" },
-  { href: "/#personal-training", label: "Personal training" },
+  { href: "/#one-on-one", label: "Consultation" },
+  { href: "/#personal-training", label: "Coaching" },
   { href: "/#faq", label: "FAQ" },
 ];
 

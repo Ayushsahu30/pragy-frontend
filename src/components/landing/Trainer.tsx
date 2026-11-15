@@ -1,4 +1,4 @@
-import { InstagramIcon } from "@/components/icons";
+import { InstagramIcon, YouTubeIcon } from "@/components/icons";
 import { ButtonLink, Eyebrow, PhotoPlaceholder, Section } from "@/components/ui";
 import { site } from "@/content/site";
 
@@ -6,18 +6,27 @@ export default function Trainer() {
   return (
     <Section
       id="trainer"
-      label="About the trainer"
+      label="Meet Pragy"
       className="bg-ink text-white"
       innerClassName="flex flex-wrap items-stretch gap-x-16 gap-y-12"
     >
       <div className="flex min-w-0 flex-[1.3_1_380px] flex-col items-start gap-6">
-        <Eyebrow className="text-peach">Meet your trainer</Eyebrow>
+        <Eyebrow className="text-peach">Meet {site.trainerName}</Eyebrow>
         <h2 className="m-0 font-serif text-[clamp(48px,6vw,84px)] font-medium leading-none tracking-[-0.01em]">
-          Hey, I’m <em className="text-peach">{site.trainerName}.</em>
+          The person behind <em className="text-peach">the method.</em>
         </h2>
         <p className="m-0 max-w-[600px] text-[19px] text-mist">
-          I lost the weight in the gym, then learned that skin, grooming and posture matter just as much. Today I
-          teach the same method I used on myself.
+          I’m {site.fullName}. My interest in looksmaxing started with my own transformation. I began by working on my
+          physique, losing weight and building muscle.
+        </p>
+        <p className="m-0 max-w-[600px] text-[19px] text-mist">
+          But along the way, I realised something: improving your appearance involves much more than just going to the
+          gym. I started exploring facial aesthetics, skincare, grooming, nutrition, posture and the different factors
+          that contribute to overall appearance.
+        </p>
+        <p className="m-0 max-w-[600px] text-[19px] text-mist">
+          Today, I share what I’ve learned through educational content and personalised coaching. My approach is simple:
+          understand the individual, identify the priorities and build a practical strategy around them.
         </p>
 
         <div className="mt-2 grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,200px),1fr))] gap-4">
@@ -31,10 +40,16 @@ export default function Trainer() {
           </div>
         </div>
 
-        <ButtonLink href={site.instagram.url} external variant="light">
-          <InstagramIcon />
-          Follow me on Instagram
-        </ButtonLink>
+        <div className="flex flex-wrap gap-3">
+          <ButtonLink href={site.instagram.url} external variant="light">
+            <InstagramIcon />
+            Follow My Journey on Instagram
+          </ButtonLink>
+          <ButtonLink href={site.youtube.url} external variant="outlineLight">
+            <YouTubeIcon />
+            Watch on YouTube
+          </ButtonLink>
+        </div>
       </div>
 
       <div className="grid min-w-0 flex-[1_1_340px] grid-cols-2 gap-4">
