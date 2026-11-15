@@ -2,6 +2,7 @@
 
 import { useId, useState, type FormEvent } from "react";
 import { buttonClass } from "@/components/ui";
+import { countries, joinPhone, OTHER_COUNTRY, splitPhone } from "@/content/countries";
 import { ApiError, authApi, type PublicUser } from "@/lib/auth";
 import { setSignedIn } from "@/lib/session";
 
@@ -23,7 +24,8 @@ export default function ProfileForm({
 }) {
   const id = useId();
   const [name, setName] = useState(user.name ?? "");
-  const [phone, setPhone] = useState(user.phone ?? "");
+  const [country, setCountry] = useState(() => splitPhone(user.phone).country);
+  const [phone, setPhone] = useState(() => splitPhone(user.phone).local);
   const [consent, setConsent] = useState(user.marketingConsent);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -37,7 +39,7 @@ export default function ProfileForm({
     try {
       const { user: updated } = await authApi.updateProfile({
         name: name.trim(),
-        phone: phone.trim(),
+        phone: joinPhone(country, phone),
         marketingConsent: consent,
       });
       setSignedIn(updated);
@@ -72,20 +74,37 @@ export default function ProfileForm({
         <label htmlFor={`${id}-phone`} className="text-sm font-semibold">
           Phone number
         </label>
-        <input
-          id={`${id}-phone`}
-          type="tel"
-          autoComplete="tel"
-          inputMode="tel"
-          required
-          placeholder="+91 98765 43210"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          aria-describedby={`${id}-phone-hint`}
-          className={fieldClass}
-        />
+        <div className="flex gap-2">
+          <select
+            aria-label="Country code"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            className={`${fieldClass} w-[42%] max-w-[190px] flex-none cursor-pointer pr-2`}
+          >
+            {countries.map((c) => (
+              <option key={c.iso} value={c.iso}>
+                {c.name} +{c.dial}
+              </option>
+            ))}
+            <option value={OTHER_COUNTRY}>Other (type full number)</option>
+          </select>
+          <input
+            id={`${id}-phone`}
+            type="tel"
+            autoComplete="tel"
+            inputMode="tel"
+            required
+            placeholder={country === OTHER_COUNTRY ? "+44 7700 900123" : "98765 43210"}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            aria-describedby={`${id}-phone-hint`}
+            className={`${fieldClass} min-w-0`}
+          />
+        </div>
         <span id={`${id}-phone-hint`} className="text-[13px] text-ink-soft">
-          So my team can reach you about your calls and coaching.
+          {country === OTHER_COUNTRY
+            ? "Type your full number starting with + and your country code."
+            : "So my team can reach you about your calls and coaching."}
         </span>
       </div>
 
