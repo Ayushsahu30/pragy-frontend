@@ -7,6 +7,12 @@ const backendUrl = (process.env.API_PROXY_TARGET ?? process.env.NEXT_PUBLIC_API_
   "",
 );
 
+/** The real website address, e.g. https://acenshun.com (no slash at the end). */
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "");
+
+/** The address the site had before the domain was bought. */
+const OLD_VERCEL_HOST = "pragy-frontend-zeta.vercel.app";
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
@@ -23,6 +29,20 @@ const nextConfig: NextConfig = {
   // own address (browsers block cookies between two different sites).
   async rewrites() {
     return [{ source: "/api/:path*", destination: `${backendUrl}/:path*` }];
+  },
+  // Once NEXT_PUBLIC_SITE_URL is the real domain, visitors of the old Vercel
+  // address are sent there, keeping the page they asked for. Logins only work
+  // on one address (Google returns to it), so everyone should use the same one.
+  async redirects() {
+    if (!siteUrl || new URL(siteUrl).hostname.endsWith(".vercel.app")) return [];
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: OLD_VERCEL_HOST }],
+        destination: `${siteUrl}/:path*`,
+        permanent: false,
+      },
+    ];
   },
 };
 

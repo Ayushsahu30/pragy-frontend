@@ -21,7 +21,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   // Full site address, used to build absolute links for the link preview image.
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://pragy-frontend-zeta.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://acenshun.com"),
   title: {
     default: `${site.name} | ${site.tagline.replace(/\.$/, "")}`,
     template: `%s | ${site.name}`,
