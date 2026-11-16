@@ -108,6 +108,12 @@ export default function AuthFlow({ mode }: { mode: Mode }) {
       if (mode === "signup" && name.trim() && !user.name) {
         ({ user } = await authApi.updateProfile({ name: name.trim() }));
       }
+      // Next.js keeps this page alive in the background after leaving it, so
+      // clear the form now: after logging out, "Log in" must start fresh.
+      setStep("email");
+      setCode("");
+      setResendIn(0);
+      setBusy(false);
       // The effect above moves on once the session updates.
       setSignedIn(user);
     } catch (e) {
