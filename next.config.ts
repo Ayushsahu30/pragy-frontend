@@ -44,6 +44,12 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Only the live site may appear in search results. Vercel sets VERCEL_ENV to
+  // "preview" for staging.acenshun.com and other test copies of the site.
+  async headers() {
+    if (process.env.VERCEL_ENV === "production") return [];
+    return [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
+  },
 };
 
 export default nextConfig;
