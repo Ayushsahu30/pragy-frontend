@@ -24,7 +24,24 @@ export type AdminUser = {
 
 export type AdminUserPage = { total: number; page: number; pageSize: number; users: AdminUser[] };
 
+export type AdminPtLead = {
+  id: string;
+  name: string;
+  email: string;
+  age: number;
+  heightCm: number;
+  weightKg: number;
+  improve: string[];
+  createdAt: string;
+  /** From their account, when they applied while logged in. */
+  phone: string | null;
+};
+
+export type AdminPtLeadPage = { total: number; page: number; pageSize: number; leads: AdminPtLead[] };
+
 export const adminApi = {
+  ptLeads: (page: number) => call<AdminPtLeadPage>(`/admin/pt-leads?page=${page}`),
+
   overview: () => call<AdminOverview>("/admin/overview"),
 
   users: (search: string, page: number) => {

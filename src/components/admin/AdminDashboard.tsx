@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import AdminPtLeads from "@/components/admin/AdminPtLeads";
 import { buttonClass, Eyebrow } from "@/components/ui";
 import { site } from "@/content/site";
 import { adminApi, type AdminOverview, type AdminUserPage } from "@/lib/admin";
@@ -12,6 +13,7 @@ import { refreshSession, signOut, useSession } from "@/lib/session";
 const navItems = [
   { href: "#overview", label: "Overview" },
   { href: "#users", label: "Users" },
+  { href: "#pt-leads", label: "Coaching applications" },
 ];
 
 const date = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" });
@@ -44,18 +46,18 @@ export default function AdminDashboard() {
   }, [session.status, router]);
 
   /** Login ended or role removed: update the page's idea of who is logged in. */
-  function handleError(e: unknown) {
+  const handleError = useCallback((e: unknown) => {
     if (e instanceof ApiError && ["NOT_SIGNED_IN", "SIGNED_IN_ELSEWHERE", "NOT_ADMIN"].includes(e.code)) {
       void refreshSession();
       return;
     }
     setError(e instanceof ApiError ? e.message : "Something went wrong. Please reload the page.");
-  }
+  }, []);
 
   useEffect(() => {
     if (!isAdmin) return;
     adminApi.overview().then(setOverview, handleError);
-  }, [isAdmin]);
+  }, [isAdmin, handleError]);
 
   // Wait until typing stops before searching.
   useEffect(() => {
@@ -75,7 +77,7 @@ export default function AdminDashboard() {
     return () => {
       current = false;
     };
-  }, [isAdmin, query, page]);
+  }, [isAdmin, query, page, handleError]);
 
   if (session.status !== "signed-in") {
     return (
@@ -274,6 +276,8 @@ export default function AdminDashboard() {
             </div>
           )}
         </section>
+
+        <AdminPtLeads onError={handleError} />
       </main>
     </div>
   );

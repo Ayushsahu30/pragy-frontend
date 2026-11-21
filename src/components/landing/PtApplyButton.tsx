@@ -4,6 +4,9 @@ import { useId, useRef, useState, type FormEvent } from "react";
 import { ChatIcon, CloseIcon } from "@/components/icons";
 import { buttonClass } from "@/components/ui";
 import { site } from "@/content/site";
+import { ApiError } from "@/lib/auth";
+import { ptApi } from "@/lib/pt";
+import { useSession } from "@/lib/session";
 
 type Application = {
   name: string;
@@ -30,13 +33,18 @@ const fieldClass =
 
 /**
  * "Apply for personal training" button and the form it opens.
- * On submit, WhatsApp opens on the team's number with the message filled in.
- * Phase 7 adds saving the application to the backend before WhatsApp opens.
+ * On submit, the application is saved in the backend (so the team has it even
+ * if the WhatsApp message is never sent), then WhatsApp opens on the team's
+ * number with the message filled in. Logged-in users get name and email filled in.
  */
 export default function PtApplyButton({ className = "" }: { className?: string }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
   const id = useId();
+  const session = useSession();
+  const user = session.status === "signed-in" ? session.user : null;
+  const prefill: Partial<Record<keyof Application, string>> = { name: user?.name ?? "", email: user?.email ?? "" };
 
   function open() {
     setError("");
@@ -47,9 +55,11 @@ export default function PtApplyButton({ className = "" }: { className?: string }
     dialogRef.current?.close();
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    if (busy) return;
+    const form = event.currentTarget;
+    const data = new FormData(form);
     const read = (key: string) => String(data.get(key) ?? "").trim();
     const application: Application = {
       name: read("name"),
@@ -70,9 +80,37 @@ export default function PtApplyButton({ className = "" }: { className?: string }
       return;
     }
 
+    // Open the WhatsApp tab now, while the click still counts: browsers block
+    // tabs opened later, after waiting for the server.
+    const tab = window.open("", "_blank");
+    if (tab) tab.opener = null;
+    setError("");
+    setBusy(true);
+    try {
+      await ptApi.apply({
+        name: application.name,
+        age: Number(application.age),
+        email: application.email,
+        heightCm: Number(application.height),
+        weightKg: Number(application.weight),
+        improve: application.improve,
+      });
+    } catch (e) {
+      // Wrong details: let them fix the form. Anything else (server down, already
+      // applied): still continue to WhatsApp, the team gets the message there.
+      if (e instanceof ApiError && e.status === 400) {
+        tab?.close();
+        setError(e.message);
+        setBusy(false);
+        return;
+      }
+    }
+    setBusy(false);
+
     const url = `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(buildMessage(application))}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-    event.currentTarget.reset();
+    if (tab) tab.location.href = url;
+    else window.location.href = url;
+    form.reset();
     close();
   }
 
@@ -123,7 +161,7 @@ export default function PtApplyButton({ className = "" }: { className?: string }
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
+          <form key={user?.id ?? "guest"} onSubmit={handleSubmit} className="flex flex-col gap-3.5">
             {fields.map((field) => (
               <div key={field.name} className="flex flex-col gap-1.5">
                 <label htmlFor={`${id}-${field.name}`} className="text-sm font-semibold">
@@ -136,6 +174,7 @@ export default function PtApplyButton({ className = "" }: { className?: string }
                   type={field.type}
                   required
                   autoComplete={field.autoComplete}
+                  defaultValue={prefill[field.name] || undefined}
                   inputMode={field.inputMode}
                   min={field.min}
                   max={field.max}
@@ -167,8 +206,12 @@ export default function PtApplyButton({ className = "" }: { className?: string }
               </p>
             )}
 
-            <button type="submit" className={buttonClass("dark", "mt-1 cursor-pointer border-0 font-sans")}>
-              Continue on WhatsApp
+            <button
+              type="submit"
+              disabled={busy}
+              className={buttonClass("dark", "mt-1 cursor-pointer border-0 font-sans disabled:opacity-60")}
+            >
+              {busy ? "Saving…" : "Continue on WhatsApp"}
             </button>
           </form>
 

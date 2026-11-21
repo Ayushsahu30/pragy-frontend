@@ -46,9 +46,11 @@ const nextConfig: NextConfig = {
   },
   // Only the live site may appear in search results. Vercel sets VERCEL_ENV to
   // "preview" for staging.acenshun.com and other test copies of the site.
+  // The hidden coaching plans page is never listed, on any copy of the site.
   async headers() {
-    if (process.env.VERCEL_ENV === "production") return [];
-    return [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
+    const noindex = [{ key: "X-Robots-Tag", value: "noindex, nofollow" }];
+    if (process.env.VERCEL_ENV === "production") return [{ source: "/coaching-plans/:path*", headers: noindex }];
+    return [{ source: "/:path*", headers: noindex }];
   },
 };
 

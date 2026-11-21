@@ -63,6 +63,10 @@ export const paymentsApi = {
   startCourseOrder: () =>
     call<CheckoutDetails>("/payments/orders", { method: "POST", body: JSON.stringify({ product: "pdf-course" }) }),
 
+  /** A personal coaching plan, e.g. "pt-elite-3m". */
+  startPlanOrder: (product: string) =>
+    call<CheckoutDetails>("/payments/orders", { method: "POST", body: JSON.stringify({ product }) }),
+
   confirm: (input: { razorpayOrderId: string; razorpayPaymentId: string; razorpaySignature: string }) =>
     call<{ orderId: string; status: OrderStatus }>("/payments/confirm", {
       method: "POST",

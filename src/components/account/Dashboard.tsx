@@ -14,6 +14,7 @@ import { prices } from "@/content/prices";
 import { site } from "@/content/site";
 import { accountApi, type AccountOverview, formatDate } from "@/lib/account";
 import { formatINR } from "@/lib/format";
+import { isPtProduct } from "@/lib/pt";
 import { signOut, useSession } from "@/lib/session";
 
 const navItems = [
@@ -60,6 +61,11 @@ export default function Dashboard() {
   }
 
   const { user } = session;
+  // The running personal coaching plan, if any.
+  const coachingPlan = overview?.products.find((p) => p.active && isPtProduct(p.slug)) ?? null;
+  const nav = coachingPlan
+    ? [...navItems.slice(0, 1), { href: "#coaching", label: "My coaching" }, ...navItems.slice(1)]
+    : navItems;
   const firstName = (user.name ?? "").trim().split(/\s+/)[0] || "there";
 
   async function logOut() {
@@ -78,7 +84,7 @@ export default function Dashboard() {
         </Link>
         <nav aria-label="Dashboard">
           <ul className="m-0 flex list-none gap-1 overflow-x-auto p-0 text-[15px] lg:flex-col">
-            {navItems.map((item, index) => (
+            {nav.map((item, index) => (
               <li key={item.href} className="flex-none">
                 <a
                   href={item.href}
@@ -162,6 +168,35 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {coachingPlan && (
+          <section id="coaching" aria-labelledby="dash-coaching" className="flex scroll-mt-6 flex-col gap-4">
+            <h2 id="dash-coaching" className={sectionTitle}>
+              My coaching
+            </h2>
+            <article className={`${card} flex flex-col gap-3.5`}>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-rust">Personal coaching</p>
+                  <h3 className="m-0 mt-0.5 font-serif text-[28px] font-medium leading-[1.15]">{coachingPlan.name}</h3>
+                </div>
+                <span className="flex-none rounded-full bg-peach px-3 py-1 text-xs font-semibold">Active</span>
+              </div>
+              <p className="m-0 text-[15px] text-ink-soft">
+                {coachingPlan.endsAt ? `Your plan runs until ${formatDate(coachingPlan.endsAt)}.` : "Your plan is active."} My team
+                messages you on WhatsApp for onboarding and check-ins.
+              </p>
+              <a
+                href={`https://wa.me/${site.whatsappNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonClass("dark", "min-h-[50px] self-start px-5")}
+              >
+                Message my team on WhatsApp
+              </a>
+            </article>
+          </section>
+        )}
+
         <MyWebinars sectionTitle={sectionTitle} />
 
         <MyCourses sectionTitle={sectionTitle} />
@@ -175,6 +210,7 @@ export default function Dashboard() {
               new Set([
                 ...overview.products.filter((p) => p.active).map((p) => p.slug),
                 ...(overview.stats.upcomingWebinars > 0 ? ["webinar"] : []),
+                ...(coachingPlan ? ["personal-training"] : []),
               ])
             }
           />

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { buttonClass, Eyebrow } from "@/components/ui";
 import { site } from "@/content/site";
 import { formatIST, formatPaise, type OrderSummary, paymentsApi } from "@/lib/payments";
+import { isPtProduct, PT_PLANS_PATH } from "@/lib/pt";
 import { useSession } from "@/lib/session";
 
 /** How long to wait for Razorpay's confirmation before showing "still confirming". */
@@ -55,6 +56,8 @@ export default function PaymentSuccess() {
 
   const paid = order?.status === "PAID";
   const failed = order?.status === "FAILED";
+  const coaching = Boolean(order && isPtProduct(order.product.slug));
+  const retry = !order ? "/webinar" : coaching ? PT_PLANS_PATH : order.product.slug === "pdf-course" ? "/pdf-course" : "/webinar";
 
   return (
     <section className="px-6 pb-20 pt-12 md:pb-26 md:pt-18">
@@ -80,16 +83,27 @@ export default function PaymentSuccess() {
             )}
             {order.access && (
               <div className="w-full rounded-3xl border border-line bg-white p-6">
-                <p className="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-ink-soft">Your course</p>
+                <p className="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-ink-soft">
+                  {coaching ? "Your coaching plan" : "Your course"}
+                </p>
                 <p className="m-0 mt-2 font-serif text-[28px] font-medium leading-[1.15]">{order.product.name}</p>
                 <p className="m-0 mt-1 text-[15px] text-ink-soft">
                   {order.access.endsAt
                     ? `Access until ${new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" }).format(new Date(order.access.endsAt))}`
                     : "Access does not expire"}
                 </p>
+                {coaching && (
+                  <p className="m-0 mt-3 text-sm text-ink-soft">
+                    My team will message you on WhatsApp to begin your onboarding.
+                  </p>
+                )}
               </div>
             )}
-            {order.access ? (
+            {coaching ? (
+              <Link href="/dashboard#coaching" className={buttonClass("dark")}>
+                Open My account
+              </Link>
+            ) : order.access ? (
               <Link href="/courses/pdf" className={buttonClass("dark")}>
                 Open the course
               </Link>
@@ -102,7 +116,7 @@ export default function PaymentSuccess() {
         ) : failed ? (
           <>
             <p className="m-0 text-[17px] text-ink-soft">Nothing was bought. If money was taken, it is refunded automatically.</p>
-            <Link href={order?.product.slug === "pdf-course" ? "/pdf-course" : "/webinar"} className={buttonClass("dark")}>
+            <Link href={retry} className={buttonClass("dark")}>
               Try again
             </Link>
           </>

@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { buttonClass } from "@/components/ui";
 import { site } from "@/content/site";
+import { PT_PLANS_PATH } from "@/lib/pt";
 
 /** Where each product's "Try again" goes. */
-const retryHref: Record<string, string> = { webinar: "/webinar", "pdf-course": "/pdf-course" };
+const retryHref: Record<string, string> = { webinar: "/webinar", "pdf-course": "/pdf-course", pt: PT_PLANS_PATH };
 
 /** The provider's reason and the buttons, read from ?product=...&reason=... */
 export default function PaymentFailedActions() {
