@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import MyWebinars from "@/components/account/MyWebinars";
 import ProfileForm from "@/components/auth/ProfileForm";
 import { buttonClass, Eyebrow } from "@/components/ui";
 import { prices } from "@/content/prices";
@@ -12,6 +13,7 @@ import { signOut, useSession } from "@/lib/session";
 
 const navItems = [
   { href: "#overview", label: "Overview" },
+  { href: "#webinars", label: "My webinars" },
   { href: "#courses", label: "My courses" },
   { href: "#calls", label: "My calls" },
   { href: "#payments", label: "Payments & receipts" },
@@ -136,6 +138,8 @@ export default function Dashboard() {
             </Link>
           </div>
         </div>
+
+        <MyWebinars sectionTitle={sectionTitle} />
 
         <section id="courses" aria-labelledby="dash-courses" className="flex scroll-mt-6 flex-col gap-4">
           <h2 id="dash-courses" className={sectionTitle}>

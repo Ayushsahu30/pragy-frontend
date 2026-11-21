@@ -1,10 +1,14 @@
+import type { ReactNode } from "react";
 import { CheckCircleIcon } from "@/components/icons";
 import { ButtonLink, Eyebrow } from "@/components/ui";
 import type { Product } from "@/content/products";
 import { formatINR } from "@/lib/format";
 
-/** Shared layout for every product sales page. */
-export default function ProductPage({ product }: { product: Product }) {
+/**
+ * Shared layout for every product sales page. `buyBox` replaces the standard
+ * price box, for products bought on the site (e.g. the webinar).
+ */
+export default function ProductPage({ product, buyBox }: { product: Product; buyBox?: ReactNode }) {
   return (
     <section aria-labelledby="product-title" className="px-6 pb-20 pt-12 md:pb-26 md:pt-18">
       <div className="mx-auto flex max-w-[1200px] flex-wrap items-start gap-x-16 gap-y-10">
@@ -35,6 +39,8 @@ export default function ProductPage({ product }: { product: Product }) {
           aria-label="Price"
           className="flex min-w-0 flex-[1_1_320px] flex-col gap-4 rounded-[28px] border border-ink bg-white p-7 sm:p-9 lg:sticky lg:top-32"
         >
+          {buyBox ?? (
+          <>
           <span className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-soft">{product.priceLabel}</span>
           <div className="flex flex-wrap items-end gap-x-3 gap-y-1">
             <span className="font-serif text-[68px] font-medium leading-none">{formatINR(product.price.amount)}</span>
@@ -51,6 +57,8 @@ export default function ProductPage({ product }: { product: Product }) {
             {product.cta.label}
           </ButtonLink>
           {product.ctaNote && <span className="text-center text-sm text-ink-soft">{product.ctaNote}</span>}
+          </>
+          )}
         </aside>
       </div>
     </section>
