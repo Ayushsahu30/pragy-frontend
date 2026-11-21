@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import AdminPtLeads from "@/components/admin/AdminPtLeads";
+import AdminSales from "@/components/admin/AdminSales";
 import AdminShell, { adminErrorMessage, adminUi } from "@/components/admin/AdminShell";
-import { adminApi, type AdminOverview, type AdminUserPage } from "@/lib/admin";
+import { adminApi, type AdminOverview, type AdminUserPage, downloadCsv, formatIstDateTime, manageApi } from "@/lib/admin";
 import { formatPaise } from "@/lib/payments";
 import { useSession } from "@/lib/session";
 
@@ -38,6 +40,30 @@ function OverviewContent() {
   const [error, setError] = useState("");
 
   const handleError = useCallback((e: unknown) => setError(adminErrorMessage(e)), []);
+  const [exporting, setExporting] = useState<"" | "marketing" | "all">("");
+
+  /** Downloads users as a spreadsheet. Each download is recorded in the activity log. */
+  async function exportUsers(scope: "marketing" | "all") {
+    setExporting(scope);
+    try {
+      const { users } = await manageApi.exportUsers(scope);
+      downloadCsv(`users-${scope === "marketing" ? "agreed-to-messages" : "all"}-${new Date().toISOString().slice(0, 10)}.csv`, [
+        ["Name", "Email", "Phone", "Agreed to tips & offers", "Agreed on (IST)", "Joined (IST)", "Last login (IST)"],
+        ...users.map((u) => [
+          u.name,
+          u.email,
+          u.phone,
+          u.marketingConsent ? "yes" : "no",
+          u.marketingConsentAt ? formatIstDateTime(u.marketingConsentAt) : "",
+          formatIstDateTime(u.createdAt),
+          u.lastLoginAt ? formatIstDateTime(u.lastLoginAt) : "",
+        ]),
+      ]);
+    } catch (e) {
+      handleError(e);
+    }
+    setExporting("");
+  }
 
   useEffect(() => {
     adminApi.overview().then(setOverview, handleError);
@@ -109,6 +135,8 @@ function OverviewContent() {
         </dl>
       </section>
 
+      <AdminSales onError={handleError} />
+
       <section id="users" aria-labelledby="admin-users" className="flex scroll-mt-6 flex-col gap-4">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h2 id="admin-users" className={adminUi.sectionTitle}>
@@ -130,6 +158,26 @@ function OverviewContent() {
           </div>
         </div>
 
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-ink-soft">Download users (CSV):</span>
+          <button
+            type="button"
+            onClick={() => exportUsers("marketing")}
+            disabled={exporting !== ""}
+            className={`${adminUi.smallButton()} bg-white`}
+          >
+            {exporting === "marketing" ? "Preparing…" : "Agreed to tips & offers (for messages)"}
+          </button>
+          <button
+            type="button"
+            onClick={() => exportUsers("all")}
+            disabled={exporting !== ""}
+            className={`${adminUi.smallButton()} bg-white`}
+          >
+            {exporting === "all" ? "Preparing…" : "Everyone (your records only)"}
+          </button>
+        </div>
+
         <div className="overflow-x-auto rounded-3xl border border-line bg-white">
           <table className={`${adminUi.table} min-w-[760px]`}>
             <thead>
@@ -146,7 +194,12 @@ function OverviewContent() {
               {result?.users.map((u) => (
                 <tr key={u.id} className="border-b border-line last:border-0">
                   <td className={`${adminUi.td} font-semibold`}>
-                    {u.name ?? <span className="font-normal text-ink-soft">Not given</span>}
+                    <Link
+                      href={`/admin/access?email=${encodeURIComponent(u.email)}`}
+                      className="text-ink underline decoration-line underline-offset-4 hover:decoration-ink"
+                    >
+                      {u.name ?? <span className="font-normal text-ink-soft">Not given</span>}
+                    </Link>
                   </td>
                   <td className={`${adminUi.td} break-all`}>{u.email}</td>
                   <td className={`${adminUi.td} whitespace-nowrap`}>{u.phone ?? <span className="text-ink-soft">—</span>}</td>

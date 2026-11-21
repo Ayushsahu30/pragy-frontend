@@ -1,8 +1,19 @@
 "use client";
 
-import { type FormEvent, useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { type FormEvent, Suspense, useCallback, useEffect, useState } from "react";
 import AdminShell, { adminErrorMessage, adminUi } from "@/components/admin/AdminShell";
 import { type AdminWebinar, formatIstDateTime, manageApi, type Member, productOptions } from "@/lib/admin";
+import { formatPaise } from "@/lib/payments";
+
+/** Opens the person in ?email=... (from a name in the users list). */
+function EmailFromAddress({ onEmail }: { onEmail: (email: string) => void }) {
+  const email = useSearchParams().get("email");
+  useEffect(() => {
+    if (email) onEmail(email.trim().toLowerCase());
+  }, [email, onEmail]);
+  return null;
+}
 
 /** Usual length of each product, shown as a hint. */
 const usualDays = (slug: string) =>
@@ -12,7 +23,7 @@ const usualDays = (slug: string) =>
 export default function AdminAccess() {
   return (
     <AdminShell
-      title="Manual access"
+      title="People & access"
       intro="For people who paid outside the website (bank transfer, UPI) or who get something free. If they have no account yet, one is made with their email; they log in later with that email. Giving the same product again adds the time after their current access ends."
     >
       <AccessContent />
@@ -37,6 +48,14 @@ function AccessContent() {
     }
   }, []);
 
+  const openFromAddress = useCallback(
+    (email: string) => {
+      setLookup(email);
+      void find(email);
+    },
+    [find],
+  );
+
   async function end(accessId: string, name: string) {
     if (!member) return;
     if (!window.confirm(`End ${name} for ${member.email} now? Their badge and content go at once.`)) return;
@@ -56,6 +75,10 @@ function AccessContent() {
           {notice}
         </p>
       )}
+
+      <Suspense fallback={null}>
+        <EmailFromAddress onEmail={openFromAddress} />
+      </Suspense>
 
       <GrantForm
         onGranted={(email, message) => {
@@ -174,6 +197,47 @@ function AccessContent() {
                     <tr>
                       <td colSpan={5} className="px-4 py-6 text-center text-ink-soft">
                         Nothing bought or given yet.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="relative overflow-x-auto">
+              <table className={`${adminUi.table} min-w-[640px]`}>
+                <caption className="px-4 pb-1 text-left text-sm font-semibold">Payments</caption>
+                <thead>
+                  <tr className="border-b border-line text-[13px] text-ink-soft">
+                    <th scope="col" className={adminUi.th}>Date</th>
+                    <th scope="col" className={adminUi.th}>What</th>
+                    <th scope="col" className={`${adminUi.th} text-right`}>Paid</th>
+                    <th scope="col" className={adminUi.th}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {member.orders.map((o) => (
+                    <tr key={o.id} className="border-b border-line align-top last:border-0">
+                      <td className={`${adminUi.td} whitespace-nowrap`}>{formatIstDateTime(o.paidAt)}</td>
+                      <td className={adminUi.td}>
+                        {o.webinar?.title ?? o.product.name}
+                        {o.manual && <span className={`${adminUi.badge} ml-2 bg-sand`}>Manual</span>}
+                        {o.promoCode && (
+                          <span className="block text-ink-soft">
+                            Code {o.promoCode.code}: −{formatPaise(o.discountPaise)}
+                          </span>
+                        )}
+                      </td>
+                      <td className={`${adminUi.td} text-right font-semibold tabular-nums`}>{formatPaise(o.amountPaise)}</td>
+                      <td className={adminUi.td}>
+                        {o.status === "REFUNDED" ? `Refunded ${formatIstDateTime(o.refundedAt)}` : "Paid"}
+                      </td>
+                    </tr>
+                  ))}
+                  {member.orders.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="px-4 py-6 text-center text-ink-soft">
+                        No payments yet.
                       </td>
                     </tr>
                   )}

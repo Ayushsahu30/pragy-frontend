@@ -34,6 +34,8 @@ export type AdminPtLead = {
   heightCm: number;
   weightKg: number;
   improve: string[];
+  status: LeadStatus;
+  statusChangedAt: string | null;
   createdAt: string;
   /** From their account, when they applied while logged in. */
   phone: string | null;
@@ -42,7 +44,8 @@ export type AdminPtLead = {
 export type AdminPtLeadPage = { total: number; page: number; pageSize: number; leads: AdminPtLead[] };
 
 export const adminApi = {
-  ptLeads: (page: number) => call<AdminPtLeadPage>(`/admin/pt-leads?page=${page}`),
+  ptLeads: (page: number, status?: LeadStatus) =>
+    call<AdminPtLeadPage>(`/admin/pt-leads?page=${page}${status ? `&status=${status}` : ""}`),
 
   overview: () => call<AdminOverview>("/admin/overview"),
 
@@ -156,6 +159,18 @@ export type Member = {
     product: { slug: string; name: string; badge: string | null };
     order: { id: string; manual: boolean; note: string | null; status: string };
   }[];
+  orders: {
+    id: string;
+    status: "PAID" | "REFUNDED";
+    amountPaise: number;
+    discountPaise: number;
+    manual: boolean;
+    paidAt: string | null;
+    refundedAt: string | null;
+    product: { name: string };
+    webinar: { title: string } | null;
+    promoCode: { code: string } | null;
+  }[];
   webinarRegistrations: {
     webinar: { id: string; title: string; startsAt: string; status: string };
     order: { id: string; manual: boolean };
@@ -187,7 +202,61 @@ const json = (method: string, body?: unknown): RequestInit => ({
   body: body === undefined ? undefined : JSON.stringify(body),
 });
 
+export type LeadStatus = "NEW" | "CONTACTED" | "BOUGHT" | "NOT_INTERESTED";
+
+export const leadStatusLabel: Record<LeadStatus, string> = {
+  NEW: "New",
+  CONTACTED: "Contacted",
+  BOUGHT: "Bought",
+  NOT_INTERESTED: "Not interested",
+};
+
+export type SalesReport = {
+  days: number;
+  from: string;
+  totalPaise: number;
+  count: number;
+  byProduct: { slug: string; name: string; count: number; paise: number }[];
+  byDay: { date: string; count: number; paise: number }[];
+};
+
+export type ExportedUser = {
+  name: string | null;
+  email: string;
+  phone: string | null;
+  marketingConsent: boolean;
+  marketingConsentAt: string | null;
+  createdAt: string;
+  lastLoginAt: string | null;
+};
+
+export type ExportedLead = {
+  createdAt: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  age: number;
+  heightCm: number;
+  weightKg: number;
+  improve: string[];
+  status: LeadStatus;
+};
+
+/** The extra admin check: a code emailed to the admin. */
+export const adminVerifyApi = {
+  status: () => call<{ verified: boolean; email: string }>("/admin/verify"),
+  request: () => call<{ ok: true }>("/admin/verify/request", { method: "POST" }),
+  confirm: (code: string) =>
+    call<{ verified: true }>("/admin/verify/confirm", { method: "POST", body: JSON.stringify({ code }) }),
+};
+
 export const manageApi = {
+  setLeadStatus: (id: string, status: LeadStatus) =>
+    call<{ id: string; status: LeadStatus }>(`/admin/pt-leads/${encodeURIComponent(id)}`, json("PATCH", { status })),
+  exportLeads: () => call<{ leads: ExportedLead[] }>("/admin/pt-leads/export"),
+  exportUsers: (scope: "marketing" | "all") => call<{ users: ExportedUser[] }>(`/admin/export/users?scope=${scope}`),
+  sales: (days: number) => call<SalesReport>(`/admin/sales?days=${days}`),
+
   webinars: () => call<{ webinars: AdminWebinar[] }>("/admin/webinars"),
   createWebinar: (input: WebinarInput) => call<AdminWebinar>("/admin/webinars", json("POST", input)),
   updateWebinar: (id: string, input: Partial<WebinarInput> & { status?: AdminWebinar["status"] }) =>

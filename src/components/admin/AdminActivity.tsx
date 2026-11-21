@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import AdminShell, { adminErrorMessage, adminUi } from "@/components/admin/AdminShell";
-import { type AuditEntry, formatIstDateTime, manageApi, productLabel } from "@/lib/admin";
+import {
+  type AuditEntry,
+  formatIstDateTime,
+  type LeadStatus,
+  leadStatusLabel,
+  manageApi,
+  productLabel,
+} from "@/lib/admin";
 import { formatPaise } from "@/lib/payments";
 
 /** Plain words for each logged action. */
@@ -27,6 +34,14 @@ function describe(e: AuditEntry): string {
       return `Edited a webinar (${Array.isArray(d.changed) ? d.changed.join(", ") : ""})`;
     case "webinar.cancel":
       return "Cancelled a webinar";
+    case "lead.status":
+      return `Marked the coaching application from ${d.email} as “${leadStatusLabel[d.to as LeadStatus] ?? d.to}”`;
+    case "export.users":
+      return `Downloaded ${d.rows} users (${d.scope === "marketing" ? "agreed to tips & offers" : "everyone"})`;
+    case "export.pt-leads":
+      return `Downloaded ${d.rows} coaching applications`;
+    case "admin.verify":
+      return "Confirmed the admin code (opened the admin area)";
     default:
       return e.action;
   }
@@ -37,7 +52,7 @@ export default function AdminActivity() {
   return (
     <AdminShell
       title="Activity log"
-      intro="Every refund, manual access, promo code and webinar change, with who did it and when. Entries can't be edited or deleted."
+      intro="Every refund, manual access, promo code, webinar change, download and admin sign-in, with who did it and when. Entries can't be edited or deleted."
     >
       <ActivityContent />
     </AdminShell>

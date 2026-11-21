@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, type ReactNode } from "react";
+import { type FormEvent, useEffect, useState, type ReactNode } from "react";
+import CodeInput from "@/components/auth/CodeInput";
 import { buttonClass, Eyebrow } from "@/components/ui";
 import { site } from "@/content/site";
+import { adminVerifyApi } from "@/lib/admin";
 import { ApiError } from "@/lib/auth";
 import { refreshSession, signOut, useSession } from "@/lib/session";
 
@@ -13,7 +15,7 @@ const navItems = [
   { href: "/admin/orders", label: "Orders & refunds" },
   { href: "/admin/webinars", label: "Webinars" },
   { href: "/admin/promo-codes", label: "Promo codes" },
-  { href: "/admin/access", label: "Manual access" },
+  { href: "/admin/access", label: "People & access" },
   { href: "/admin/activity", label: "Activity log" },
 ];
 
@@ -44,6 +46,11 @@ export function adminErrorMessage(e: unknown): string {
     void refreshSession();
     return "";
   }
+  // The 12-hour admin check ran out: reload, and the code screen shows again.
+  if (e instanceof ApiError && e.code === "ADMIN_VERIFY_REQUIRED") {
+    window.location.reload();
+    return "";
+  }
   return e instanceof ApiError ? e.message : "Something went wrong. Please reload the page.";
 }
 
@@ -56,10 +63,19 @@ export default function AdminShell({ title, intro, children }: { title: string; 
   const pathname = usePathname();
   const session = useSession();
   const isAdmin = session.status === "signed-in" && session.user.role === "ADMIN";
+  // The extra check: has this login confirmed an emailed code (lasts 12 hours)?
+  const [verify, setVerify] = useState<{ verified: boolean; email: string } | null>(null);
 
   useEffect(() => {
     if (session.status === "signed-out") router.replace(`/login?next=${encodeURIComponent(pathname)}`);
   }, [session.status, router, pathname]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    adminVerifyApi.status().then(setVerify, (e: unknown) => {
+      adminErrorMessage(e);
+    });
+  }, [isAdmin]);
 
   if (session.status !== "signed-in") {
     return (
@@ -79,6 +95,18 @@ export default function AdminShell({ title, intro, children }: { title: string; 
         </Link>
       </main>
     );
+  }
+
+  if (!verify) {
+    return (
+      <main id="main" className="flex min-h-dvh items-center justify-center bg-cream">
+        <p className="m-0 text-ink-soft">Loading…</p>
+      </main>
+    );
+  }
+
+  if (!verify.verified) {
+    return <VerifyScreen email={verify.email} onVerified={() => setVerify({ ...verify, verified: true })} />;
   }
 
   async function logOut() {
@@ -141,5 +169,101 @@ export default function AdminShell({ title, intro, children }: { title: string; 
         {children}
       </main>
     </div>
+  );
+}
+
+/**
+ * "Confirm it's you": the admin area opens only after a code emailed to the
+ * admin's own address. It lasts 12 hours on this device.
+ */
+function VerifyScreen({ email, onVerified }: { email: string; onVerified: () => void }) {
+  const [sent, setSent] = useState(false);
+  const [code, setCode] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  async function send() {
+    setBusy(true);
+    setError("");
+    try {
+      await adminVerifyApi.request();
+      setSent(true);
+    } catch (e) {
+      setError(adminErrorMessage(e));
+    }
+    setBusy(false);
+  }
+
+  async function confirm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (code.length !== 6) return;
+    setBusy(true);
+    setError("");
+    try {
+      await adminVerifyApi.confirm(code);
+      onVerified();
+      return;
+    } catch (e) {
+      setError(adminErrorMessage(e));
+      setCode("");
+    }
+    setBusy(false);
+  }
+
+  return (
+    <main id="main" className="flex min-h-dvh items-center justify-center bg-cream px-6 py-12">
+      <div className="flex w-full max-w-[440px] flex-col gap-5">
+        <Eyebrow>Admin</Eyebrow>
+        <h1 className="m-0 font-serif text-[clamp(36px,4vw,48px)] font-medium leading-none">Confirm it&apos;s you.</h1>
+        <p className="m-0 text-[15px] text-ink-soft">
+          For safety, the admin area needs a code we email to <strong className="text-ink">{email}</strong>. It stays
+          open on this device for 12 hours.
+        </p>
+        {sent ? (
+          <form onSubmit={confirm} className="flex flex-col gap-4">
+            <CodeInput value={code} onChange={setCode} disabled={busy} />
+            {error && (
+              <p role="alert" className="m-0 rounded-2xl bg-white p-3.5 text-sm text-rust-dark">
+                {error}
+              </p>
+            )}
+            <button
+              type="submit"
+              disabled={busy || code.length !== 6}
+              className={buttonClass("dark", "cursor-pointer border-0 font-sans disabled:opacity-60")}
+            >
+              {busy ? "Checking…" : "Open the admin area"}
+            </button>
+            <button
+              type="button"
+              onClick={send}
+              disabled={busy}
+              className="min-h-11 cursor-pointer self-start border-0 bg-transparent p-0 font-sans text-sm font-semibold text-ink underline underline-offset-4"
+            >
+              Send a new code
+            </button>
+          </form>
+        ) : (
+          <>
+            {error && (
+              <p role="alert" className="m-0 rounded-2xl bg-white p-3.5 text-sm text-rust-dark">
+                {error}
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={send}
+              disabled={busy}
+              className={buttonClass("dark", "cursor-pointer border-0 font-sans disabled:opacity-60")}
+            >
+              {busy ? "Sending…" : "Email me a code"}
+            </button>
+          </>
+        )}
+        <Link href="/dashboard" className="text-sm font-semibold text-ink underline underline-offset-4">
+          Back to my account
+        </Link>
+      </div>
+    </main>
   );
 }
