@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import MyCourses from "@/components/account/MyCourses";
 import MyWebinars from "@/components/account/MyWebinars";
 import ProfileForm from "@/components/auth/ProfileForm";
 import { buttonClass, Eyebrow } from "@/components/ui";
@@ -141,18 +142,7 @@ export default function Dashboard() {
 
         <MyWebinars sectionTitle={sectionTitle} />
 
-        <section id="courses" aria-labelledby="dash-courses" className="flex scroll-mt-6 flex-col gap-4">
-          <h2 id="dash-courses" className={sectionTitle}>
-            My courses
-          </h2>
-          <div className={emptyCard}>
-            <h3 className="m-0 font-serif text-[28px] font-medium leading-[1.15]">No courses yet</h3>
-            <p className="m-0 max-w-[420px] text-[15px] text-ink-soft">Courses you buy appear here with their access period.</p>
-            <Link href="/#courses" className={buttonClass("dark", "min-h-[50px] px-5")}>
-              Browse courses
-            </Link>
-          </div>
-        </section>
+        <MyCourses sectionTitle={sectionTitle} />
 
         <section id="calls" aria-labelledby="dash-calls" className="flex scroll-mt-6 flex-col gap-4">
           <h2 id="dash-calls" className={sectionTitle}>

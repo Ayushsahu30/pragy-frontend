@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import CourseBuyBox from "@/components/payments/CourseBuyBox";
 import ProductPage from "@/components/ProductPage";
 import { products } from "@/content/products";
 
@@ -7,5 +8,5 @@ const product = products.pdfCourse;
 export const metadata: Metadata = { title: product.metaTitle, description: product.intro };
 
 export default function PdfCoursePage() {
-  return <ProductPage product={product} />;
+  return <ProductPage product={product} buyBox={<CourseBuyBox product={product} />} />;
 }

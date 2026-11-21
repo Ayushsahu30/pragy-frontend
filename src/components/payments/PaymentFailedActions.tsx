@@ -6,7 +6,7 @@ import { buttonClass } from "@/components/ui";
 import { site } from "@/content/site";
 
 /** Where each product's "Try again" goes. */
-const retryHref: Record<string, string> = { webinar: "/webinar" };
+const retryHref: Record<string, string> = { webinar: "/webinar", "pdf-course": "/pdf-course" };
 
 /** The provider's reason and the buttons, read from ?product=...&reason=... */
 export default function PaymentFailedActions() {

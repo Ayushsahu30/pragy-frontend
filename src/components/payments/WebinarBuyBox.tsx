@@ -8,7 +8,7 @@ import { prices } from "@/content/prices";
 import { site } from "@/content/site";
 import { ApiError } from "@/lib/auth";
 import { formatINR } from "@/lib/format";
-import { formatIST, formatPaise, type NextWebinar, openCheckout, paymentsApi } from "@/lib/payments";
+import { checkout, formatIST, formatPaise, type NextWebinar, paymentsApi } from "@/lib/payments";
 import { useSession } from "@/lib/session";
 
 type Loaded = { webinar: NextWebinar | null; owned: boolean };
@@ -55,17 +55,9 @@ export default function WebinarBuyBox() {
     setBusy(true);
     try {
       const details = await paymentsApi.startWebinarOrder(webinar.id);
-      const outcome = await openCheckout(details, site.name);
+      const outcome = await checkout(details, site.name);
       if (outcome.result === "paid") {
-        // The backend checks Razorpay's signature before giving the seat.
-        await paymentsApi
-          .confirm({
-            razorpayOrderId: outcome.response.razorpay_order_id,
-            razorpayPaymentId: outcome.response.razorpay_payment_id,
-            razorpaySignature: outcome.response.razorpay_signature,
-          })
-          .catch(() => undefined); // the webhook can still confirm it; the next page waits for it
-        router.push(`/payment/success?order=${encodeURIComponent(details.orderId)}`);
+        router.push(`/payment/success?order=${encodeURIComponent(outcome.orderId)}`);
         return;
       }
       if (outcome.result === "failed") {

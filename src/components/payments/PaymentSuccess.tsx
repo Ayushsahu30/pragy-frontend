@@ -78,14 +78,31 @@ export default function PaymentSuccess() {
                 <p className="m-0 mt-3 text-sm text-ink-soft">The joining link is in My account.</p>
               </div>
             )}
-            <Link href="/dashboard#webinars" className={buttonClass("dark")}>
-              Open My account
-            </Link>
+            {order.access && (
+              <div className="w-full rounded-3xl border border-line bg-white p-6">
+                <p className="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-ink-soft">Your course</p>
+                <p className="m-0 mt-2 font-serif text-[28px] font-medium leading-[1.15]">{order.product.name}</p>
+                <p className="m-0 mt-1 text-[15px] text-ink-soft">
+                  {order.access.endsAt
+                    ? `Access until ${new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" }).format(new Date(order.access.endsAt))}`
+                    : "Access does not expire"}
+                </p>
+              </div>
+            )}
+            {order.access ? (
+              <Link href="/courses/pdf" className={buttonClass("dark")}>
+                Open the course
+              </Link>
+            ) : (
+              <Link href="/dashboard#webinars" className={buttonClass("dark")}>
+                Open My account
+              </Link>
+            )}
           </>
         ) : failed ? (
           <>
-            <p className="m-0 text-[17px] text-ink-soft">No seat was booked. If money was taken, it is refunded automatically.</p>
-            <Link href="/webinar" className={buttonClass("dark")}>
+            <p className="m-0 text-[17px] text-ink-soft">Nothing was bought. If money was taken, it is refunded automatically.</p>
+            <Link href={order?.product.slug === "pdf-course" ? "/pdf-course" : "/webinar"} className={buttonClass("dark")}>
               Try again
             </Link>
           </>

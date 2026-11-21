@@ -1,4 +1,4 @@
-import { call } from "@/lib/auth";
+import { ApiError, call } from "@/lib/auth";
 
 /** Buying and webinars. The backend decides every price and checks every payment. */
 
@@ -37,8 +37,13 @@ export type OrderSummary = {
   amountPaise: number;
   product: { slug: string; name: string };
   webinar: { id: string; title: string; startsAt: string } | null;
+  /** For courses: when access ends (null = never). */
+  access: { endsAt: string | null } | null;
   paidAt: string | null;
 };
+
+/** The PDF course for a user with access. */
+export type CourseInfo = { pageCount: number; lastPage: number; endsAt: string | null };
 
 export const paymentsApi = {
   nextWebinar: () => call<{ webinar: NextWebinar | null }>("/webinars/next"),
@@ -51,6 +56,9 @@ export const paymentsApi = {
       body: JSON.stringify({ product: "webinar", webinarId }),
     }),
 
+  startCourseOrder: () =>
+    call<CheckoutDetails>("/payments/orders", { method: "POST", body: JSON.stringify({ product: "pdf-course" }) }),
+
   confirm: (input: { razorpayOrderId: string; razorpayPaymentId: string; razorpaySignature: string }) =>
     call<{ orderId: string; status: OrderStatus }>("/payments/confirm", {
       method: "POST",
@@ -59,6 +67,43 @@ export const paymentsApi = {
 
   order: (orderId: string) => call<OrderSummary>(`/payments/orders/${encodeURIComponent(orderId)}`),
 };
+
+export const courseApi = {
+  /** Fails with ApiError code NO_ACCESS when the user has no active access. */
+  info: () => call<CourseInfo>("/courses/pdf"),
+
+  saveProgress: (page: number) =>
+    call<{ ok: true }>("/courses/pdf/progress", { method: "PUT", body: JSON.stringify({ page }) }),
+
+  /** One watermarked page as an image. */
+  async page(page: number): Promise<Blob> {
+    const res = await fetch(`/api/courses/pdf/pages/${page}`, { credentials: "same-origin", cache: "no-store" });
+    if (res.ok) return res.blob();
+    const body = (await res.json().catch(() => null)) as { code?: string; message?: string } | null;
+    throw new ApiError(body?.code ?? `HTTP_${res.status}`, body?.message ?? "This page could not be loaded.", res.status);
+  },
+};
+
+/**
+ * The whole payment, after the backend created the order: opens Razorpay's
+ * window and, when paid, asks the backend to check Razorpay's signature.
+ * Access is given by the backend, never by this function.
+ */
+export async function checkout(
+  details: CheckoutDetails,
+  brandName: string,
+): Promise<{ result: "paid"; orderId: string } | { result: "closed" } | { result: "failed"; reason: string }> {
+  const outcome = await openCheckout(details, brandName);
+  if (outcome.result !== "paid") return outcome;
+  await paymentsApi
+    .confirm({
+      razorpayOrderId: outcome.response.razorpay_order_id,
+      razorpayPaymentId: outcome.response.razorpay_payment_id,
+      razorpaySignature: outcome.response.razorpay_signature,
+    })
+    .catch(() => undefined); // Razorpay's webhook can still confirm it; the success page waits for it
+  return { result: "paid", orderId: details.orderId };
+}
 
 /** "Sun, 14 Dec 2026, 7:00 pm IST". Webinars run on Indian time. */
 export function formatIST(iso: string): string {
