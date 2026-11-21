@@ -18,6 +18,8 @@ export type AdminUser = {
   role: "USER" | "ADMIN";
   marketingConsent: boolean;
   google: boolean;
+  /** Account made by an admin in Manual access. */
+  addedByAdmin: boolean;
   createdAt: string;
   lastLoginAt: string | null;
 };

@@ -155,6 +155,7 @@ function OverviewContent() {
                   <td className={adminUi.td}>
                     <div className="flex flex-wrap gap-1.5">
                       {u.role === "ADMIN" && <span className={`${adminUi.badge} bg-ink text-white`}>Admin</span>}
+                      {u.addedByAdmin && <span className={`${adminUi.badge} border border-ink`}>Added by admin</span>}
                       {u.google && <span className={`${adminUi.badge} bg-sand`}>Google</span>}
                       {u.marketingConsent && <span className={`${adminUi.badge} bg-peach`}>Tips & offers</span>}
                     </div>
