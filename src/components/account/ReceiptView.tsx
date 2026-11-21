@@ -139,8 +139,16 @@ export default function ReceiptView() {
                 <span className="font-semibold">{order.webinar?.title ?? order.product.name}</span>
                 {detail && <span className="block text-ink-soft">{detail}</span>}
               </td>
-              <td className="py-3 text-right font-semibold tabular-nums">{formatPaise(order.amountPaise)}</td>
+              <td className="py-3 text-right font-semibold tabular-nums">
+                {formatPaise(order.amountPaise + order.discountPaise)}
+              </td>
             </tr>
+            {order.discountPaise > 0 && (
+              <tr className="border-b border-line">
+                <td className="py-3">Promo code {order.promoCode}</td>
+                <td className="py-3 text-right font-semibold tabular-nums">−{formatPaise(order.discountPaise)}</td>
+              </tr>
+            )}
             <tr>
               <td className="pt-3 font-semibold">Total paid ({order.currency})</td>
               <td className="pt-3 text-right font-serif text-[24px] font-semibold tabular-nums">{formatPaise(order.amountPaise)}</td>

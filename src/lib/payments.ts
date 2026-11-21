@@ -24,6 +24,7 @@ export type CheckoutDetails = {
   razorpayOrderId: string;
   keyId: string;
   amountPaise: number;
+  discountPaise: number;
   currency: string;
   description: string;
   prefill: { name: string; email: string; contact: string };
@@ -31,10 +32,24 @@ export type CheckoutDetails = {
 
 export type OrderStatus = "CREATED" | "PAID" | "FAILED" | "REFUNDED";
 
+/** What a promo code takes off, for one product. */
+export type PromoPreview = {
+  code: string;
+  /** The product it was checked for. */
+  product: string;
+  pricePaise: number;
+  discountPaise: number;
+  amountPaise: number;
+};
+
 export type OrderSummary = {
   id: string;
   status: OrderStatus;
   amountPaise: number;
+  discountPaise: number;
+  promoCode: string | null;
+  manual: boolean;
+  refundedAt: string | null;
   currency: string;
   buyer: { name: string | null; email: string; phone: string | null };
   /** Razorpay's payment id, once paid. */
@@ -54,18 +69,30 @@ export const paymentsApi = {
 
   myWebinars: () => call<{ webinars: MyWebinar[] }>("/webinars/mine"),
 
-  startWebinarOrder: (webinarId: string) =>
+  startWebinarOrder: (webinarId: string, promoCode?: string) =>
     call<CheckoutDetails>("/payments/orders", {
       method: "POST",
-      body: JSON.stringify({ product: "webinar", webinarId }),
+      body: JSON.stringify({ product: "webinar", webinarId, promoCode }),
     }),
 
-  startCourseOrder: () =>
-    call<CheckoutDetails>("/payments/orders", { method: "POST", body: JSON.stringify({ product: "pdf-course" }) }),
+  startCourseOrder: (promoCode?: string) =>
+    call<CheckoutDetails>("/payments/orders", {
+      method: "POST",
+      body: JSON.stringify({ product: "pdf-course", promoCode }),
+    }),
 
   /** A personal coaching plan, e.g. "pt-elite-3m". */
-  startPlanOrder: (product: string) =>
-    call<CheckoutDetails>("/payments/orders", { method: "POST", body: JSON.stringify({ product }) }),
+  startPlanOrder: (product: string, promoCode?: string) =>
+    call<CheckoutDetails>("/payments/orders", { method: "POST", body: JSON.stringify({ product, promoCode }) }),
+
+  /** What a promo code would take off. Fails with the reason when it can't be used. */
+  checkPromo: async (input: { product: string; webinarId?: string; promoCode: string }): Promise<PromoPreview> => ({
+    ...(await call<Omit<PromoPreview, "product">>("/payments/promo-check", {
+      method: "POST",
+      body: JSON.stringify(input),
+    })),
+    product: input.product,
+  }),
 
   confirm: (input: { razorpayOrderId: string; razorpayPaymentId: string; razorpaySignature: string }) =>
     call<{ orderId: string; status: OrderStatus }>("/payments/confirm", {

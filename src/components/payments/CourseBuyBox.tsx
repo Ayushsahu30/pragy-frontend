@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import PromoCodeField from "@/components/payments/PromoCodeField";
 import { buttonClass } from "@/components/ui";
 import type { Product } from "@/content/products";
 import { site } from "@/content/site";
 import { ApiError } from "@/lib/auth";
 import { formatINR } from "@/lib/format";
-import { checkout, courseApi, paymentsApi } from "@/lib/payments";
+import { checkout, courseApi, formatPaise, paymentsApi, type PromoPreview } from "@/lib/payments";
 import { useSession } from "@/lib/session";
 
 const dateFormat = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" });
@@ -26,6 +27,7 @@ export default function CourseBuyBox({ product }: { product: Product }) {
   const [endsAt, setEndsAt] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [promo, setPromo] = useState<PromoPreview | null>(null);
   // Visitors who are not logged in can always buy (after logging in).
   const state: State = session.status === "signed-out" ? "buy" : checked;
 
@@ -57,7 +59,7 @@ export default function CourseBuyBox({ product }: { product: Product }) {
     }
     setBusy(true);
     try {
-      const outcome = await checkout(await paymentsApi.startCourseOrder(), site.name);
+      const outcome = await checkout(await paymentsApi.startCourseOrder(promo?.code), site.name);
       if (outcome.result === "paid") {
         router.push(`/payment/success?order=${encodeURIComponent(outcome.orderId)}`);
         return;
@@ -105,13 +107,18 @@ export default function CourseBuyBox({ product }: { product: Product }) {
         </p>
       ) : (
         <>
+          {signedIn && state === "buy" && <PromoCodeField product="pdf-course" applied={promo} onChange={setPromo} />}
           <button
             type="button"
             onClick={buy}
             disabled={busy || state === "loading"}
             className={buttonClass("dark", "mt-2 cursor-pointer self-stretch border-0 font-sans disabled:opacity-60")}
           >
-            {busy ? "Opening payment…" : signedIn ? `${product.cta.label} · ${formatINR(product.price.amount)}` : "Log in to buy"}
+            {busy
+              ? "Opening payment…"
+              : signedIn
+                ? `${product.cta.label} · ${promo ? formatPaise(promo.amountPaise) : formatINR(product.price.amount)}`
+                : "Log in to buy"}
           </button>
           <span className="text-center text-sm text-ink-soft">Secure payment by Razorpay: UPI, cards and netbanking.</span>
         </>

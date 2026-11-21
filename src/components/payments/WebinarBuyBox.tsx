@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import PromoCodeField from "@/components/payments/PromoCodeField";
 import { buttonClass } from "@/components/ui";
 import { prices } from "@/content/prices";
 import { site } from "@/content/site";
 import { ApiError } from "@/lib/auth";
 import { formatINR } from "@/lib/format";
-import { checkout, formatIST, formatPaise, type NextWebinar, paymentsApi } from "@/lib/payments";
+import { checkout, formatIST, formatPaise, type NextWebinar, paymentsApi, type PromoPreview } from "@/lib/payments";
 import { useSession } from "@/lib/session";
 
 type Loaded = { webinar: NextWebinar | null; owned: boolean };
@@ -25,6 +26,7 @@ export default function WebinarBuyBox() {
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [promo, setPromo] = useState<PromoPreview | null>(null);
 
   // The next webinar, and whether this user already has a seat in it.
   useEffect(() => {
@@ -54,7 +56,7 @@ export default function WebinarBuyBox() {
     }
     setBusy(true);
     try {
-      const details = await paymentsApi.startWebinarOrder(webinar.id);
+      const details = await paymentsApi.startWebinarOrder(webinar.id, promo?.code);
       const outcome = await checkout(details, site.name);
       if (outcome.result === "paid") {
         router.push(`/payment/success?order=${encodeURIComponent(outcome.orderId)}`);
@@ -114,14 +116,23 @@ export default function WebinarBuyBox() {
           You have a seat. See it in My account
         </Link>
       ) : webinar ? (
-        <button
-          type="button"
-          onClick={() => buy(webinar)}
-          disabled={busy || session.status === "loading"}
-          className={buttonClass("dark", "mt-2 cursor-pointer self-stretch border-0 font-sans disabled:opacity-60")}
-        >
-          {busy ? "Opening payment…" : signedIn ? `Book my seat · ${price}` : "Log in to book my seat"}
-        </button>
+        <>
+          {signedIn && (
+            <PromoCodeField product="webinar" webinarId={webinar.id} applied={promo} onChange={setPromo} />
+          )}
+          <button
+            type="button"
+            onClick={() => buy(webinar)}
+            disabled={busy || session.status === "loading"}
+            className={buttonClass("dark", "mt-2 cursor-pointer self-stretch border-0 font-sans disabled:opacity-60")}
+          >
+            {busy
+              ? "Opening payment…"
+              : signedIn
+                ? `Book my seat · ${promo ? formatPaise(promo.amountPaise) : price}`
+                : "Log in to book my seat"}
+          </button>
+        </>
       ) : (
         <button type="button" disabled className={buttonClass("dark", "mt-2 self-stretch border-0 font-sans opacity-60")}>
           Coming soon

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { CheckCircleIcon } from "@/components/icons";
+import PromoCodeField from "@/components/payments/PromoCodeField";
 import { buttonClass, Eyebrow } from "@/components/ui";
 import { type PlanDuration, planDurations, prices, ptPlans, skoolBonusValuePerMonth } from "@/content/prices";
 import { ptPlanDetails, ptPlansPage } from "@/content/pt-plans";
@@ -11,7 +12,7 @@ import { site } from "@/content/site";
 import { accountApi, formatDate } from "@/lib/account";
 import { ApiError } from "@/lib/auth";
 import { formatINR } from "@/lib/format";
-import { checkout, paymentsApi } from "@/lib/payments";
+import { checkout, formatPaise, paymentsApi, type PromoPreview } from "@/lib/payments";
 import { isPtProduct, PT_PLANS_PATH, ptProductSlug } from "@/lib/pt";
 import { useSession } from "@/lib/session";
 
@@ -98,7 +99,12 @@ function PlanCard({ plan, locked }: { plan: (typeof ptPlans)[number]; locked: bo
   const [duration, setDuration] = useState<PlanDuration>("3m");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [promo, setPromo] = useState<PromoPreview | null>(null);
+  const productSlug = ptProductSlug(plan.id, duration);
+  // A code checked for another length is re-checked by PromoCodeField.
+  const discounted = promo && promo.product === productSlug ? promo : null;
   const amount = plan.prices[duration];
+  const amountLabel = discounted ? formatPaise(discounted.amountPaise) : formatINR(amount);
   const durationLabel = planDurations.find((d) => d.id === duration)!.label;
 
   async function buy() {
@@ -109,7 +115,7 @@ function PlanCard({ plan, locked }: { plan: (typeof ptPlans)[number]; locked: bo
     }
     setBusy(true);
     try {
-      const outcome = await checkout(await paymentsApi.startPlanOrder(ptProductSlug(plan.id, duration)), site.name);
+      const outcome = await checkout(await paymentsApi.startPlanOrder(productSlug, promo?.code), site.name);
       if (outcome.result === "paid") {
         router.push(`/payment/success?order=${encodeURIComponent(outcome.orderId)}`);
         return;
@@ -174,6 +180,8 @@ function PlanCard({ plan, locked }: { plan: (typeof ptPlans)[number]; locked: bo
         </div>
       </fieldset>
 
+      {signedIn && !locked && <PromoCodeField product={productSlug} applied={promo} onChange={setPromo} />}
+
       {message && (
         <p role="alert" className="m-0 rounded-2xl bg-cream p-3.5 text-sm text-rust-dark">
           {message}
@@ -189,8 +197,8 @@ function PlanCard({ plan, locked }: { plan: (typeof ptPlans)[number]; locked: bo
         {busy
           ? "Opening payment…"
           : signedIn
-            ? `Buy ${plan.name}, ${durationLabel} · ${formatINR(amount)}`
-            : `Log in to buy · ${formatINR(amount)}`}
+            ? `Buy ${plan.name}, ${durationLabel} · ${amountLabel}`
+            : `Log in to buy · ${amountLabel}`}
       </button>
       <span className="text-center text-sm text-ink-soft">Secure payment by Razorpay: UPI, cards and netbanking.</span>
     </article>
