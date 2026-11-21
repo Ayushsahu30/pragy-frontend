@@ -2,13 +2,17 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import LockedProducts from "@/components/account/LockedProducts";
 import MyCourses from "@/components/account/MyCourses";
+import MyPayments from "@/components/account/MyPayments";
+import MyVault from "@/components/account/MyVault";
 import MyWebinars from "@/components/account/MyWebinars";
 import ProfileForm from "@/components/auth/ProfileForm";
 import { buttonClass, Eyebrow } from "@/components/ui";
 import { prices } from "@/content/prices";
 import { site } from "@/content/site";
+import { accountApi, type AccountOverview, formatDate } from "@/lib/account";
 import { formatINR } from "@/lib/format";
 import { signOut, useSession } from "@/lib/session";
 
@@ -16,6 +20,7 @@ const navItems = [
   { href: "#overview", label: "Overview" },
   { href: "#webinars", label: "My webinars" },
   { href: "#courses", label: "My courses" },
+  { href: "#vault", label: "Members' vault" },
   { href: "#calls", label: "My calls" },
   { href: "#payments", label: "Payments & receipts" },
   { href: "#profile", label: "Profile" },
@@ -23,15 +28,22 @@ const navItems = [
 
 const sectionTitle = "m-0 font-serif text-[clamp(32px,3.4vw,40px)] font-medium leading-[1.1]";
 const card = "rounded-3xl border border-line bg-white p-6";
-const emptyCard = "flex flex-col items-center gap-3 rounded-3xl border border-dashed border-field bg-white px-6 py-8 text-center";
 
 /**
- * "My account" for a new user (design: "Dashboard – New user"). Courses, calls
- * and payments are empty until buying is built (Phases 4 to 7).
+ * "My account": what the user owns, badges, webinars, courses, vault, calls,
+ * payments and profile. Calls are added in Phase 7.
  */
 export default function Dashboard() {
   const router = useRouter();
   const session = useSession();
+  const [overview, setOverview] = useState<AccountOverview | null>(null);
+  const ready = session.status === "signed-in" && !session.user.needsProfile;
+
+  // Owned products, badges and counts.
+  useEffect(() => {
+    if (!ready) return;
+    accountApi.overview().then(setOverview, () => undefined);
+  }, [ready]);
 
   // Not logged in (or logged out from another device): go to login, then come back.
   useEffect(() => {
@@ -106,12 +118,22 @@ export default function Dashboard() {
             <h1 id="dash-title" className="m-0 font-serif text-[clamp(42px,4.6vw,60px)] font-medium leading-none">
               Welcome, {firstName}.
             </h1>
+            {overview && overview.badges.length > 0 && (
+              <ul aria-label="Your badges" className="m-0 mt-2 flex list-none flex-wrap gap-2 p-0">
+                {overview.badges.map((b) => (
+                  <li key={b.label} className="rounded-full bg-peach px-3.5 py-1.5 text-sm font-semibold">
+                    {b.label}
+                    {b.endsAt && <span className="font-normal text-ink-soft"> · until {formatDate(b.endsAt)}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <dl className="m-0 grid w-full max-w-[440px] grid-cols-3 gap-2.5">
             {[
-              ["0", "Active courses"],
-              ["0", "Upcoming calls"],
-              ["0", "Payments"],
+              [overview ? String(overview.stats.activeCourses) : "…", "Active courses"],
+              [overview ? String(overview.stats.upcomingWebinars) : "…", "Upcoming webinars"],
+              [overview ? String(overview.stats.payments) : "…", "Payments"],
             ].map(([value, label]) => (
               <div key={label} className="flex flex-col-reverse rounded-[20px] border border-line bg-white px-4 py-3.5">
                 <dt className="text-[13px] text-ink-soft">{label}</dt>
@@ -143,6 +165,20 @@ export default function Dashboard() {
         <MyWebinars sectionTitle={sectionTitle} />
 
         <MyCourses sectionTitle={sectionTitle} />
+
+        <MyVault sectionTitle={sectionTitle} isMember={(overview?.stats.activeCourses ?? 0) > 0} />
+
+        {overview && (
+          <LockedProducts
+            sectionTitle={sectionTitle}
+            owned={
+              new Set([
+                ...overview.products.filter((p) => p.active).map((p) => p.slug),
+                ...(overview.stats.upcomingWebinars > 0 ? ["webinar"] : []),
+              ])
+            }
+          />
+        )}
 
         <section id="calls" aria-labelledby="dash-calls" className="flex scroll-mt-6 flex-col gap-4">
           <h2 id="dash-calls" className={sectionTitle}>
@@ -182,15 +218,7 @@ export default function Dashboard() {
           </div>
         </section>
 
-        <section id="payments" aria-labelledby="dash-payments" className="flex scroll-mt-6 flex-col gap-4">
-          <h2 id="dash-payments" className={sectionTitle}>
-            Payments &amp; receipts
-          </h2>
-          <div className={emptyCard}>
-            <h3 className="m-0 font-serif text-[26px] font-medium">No payments yet</h3>
-            <p className="m-0 text-[15px] text-ink-soft">Receipts for everything you buy will appear here.</p>
-          </div>
-        </section>
+        <MyPayments sectionTitle={sectionTitle} />
 
         <section id="profile" aria-labelledby="dash-profile" className="flex scroll-mt-6 flex-col gap-4">
           <h2 id="dash-profile" className={sectionTitle}>

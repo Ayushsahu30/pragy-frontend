@@ -35,6 +35,10 @@ export type OrderSummary = {
   id: string;
   status: OrderStatus;
   amountPaise: number;
+  currency: string;
+  buyer: { name: string | null; email: string; phone: string | null };
+  /** Razorpay's payment id, once paid. */
+  paymentId: string | null;
   product: { slug: string; name: string };
   webinar: { id: string; title: string; startsAt: string } | null;
   /** For courses: when access ends (null = never). */
