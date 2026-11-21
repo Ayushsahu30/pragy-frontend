@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Contact" };
 
 export default function ContactPage() {
   return (
-    <LegalPage title="Contact" updated="[Date]">
+    <LegalPage title="Contact" updated={site.legalUpdated}>
       <p>We usually reply within one working day.</p>
 
       <h2>Email</h2>
@@ -42,8 +42,11 @@ export default function ContactPage() {
       <p>
         {orPlaceholder(site.businessName, "Business name")}
         <br />
+        {site.businessType}
+        <br />
         {orPlaceholder(site.businessAddress, "Business address")}
       </p>
+      <p>All our products are delivered online. We do not have a shop or office open to visitors.</p>
     </LegalPage>
   );
 }

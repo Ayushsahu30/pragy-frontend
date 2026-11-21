@@ -12,7 +12,7 @@ export default function PrivacyPage() {
   const email = orPlaceholder(site.supportEmail, "Support email");
 
   return (
-    <LegalPage title="Privacy Policy" updated="[Date]">
+    <LegalPage title="Privacy Policy" updated={site.legalUpdated}>
       <p>
         This policy explains what personal data {business} (“we”, “us”) collects through this website, why we collect
         it, and how you can control it.
@@ -52,14 +52,15 @@ export default function PrivacyPage() {
       <h2>Who we share it with</h2>
       <p>
         Only with the services that run this website: payment processing (Razorpay), call booking (Cal.com and Google
-        Calendar), email delivery, hosting, analytics and advertising (Google Analytics and Meta). We do not sell your
-        data.
+        Calendar), email delivery (Resend), sign-in (Google), hosting (Vercel and Railway), analytics and advertising
+        (Google Analytics and Meta). We do not sell your data.
       </p>
 
       <h2>How long we keep it</h2>
       <p>
-        We keep your account data while your account is active, and payment records for as long as the law requires.
-        [Retention period to be confirmed.]
+        We keep your account data while your account is active. If you ask us to delete your account, we delete your
+        personal data within 30 days, except payment and invoice records, which we keep for as long as Indian tax and
+        accounting law requires.
       </p>
 
       <h2>Your rights</h2>

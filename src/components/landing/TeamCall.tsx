@@ -38,7 +38,6 @@ export default function TeamCall() {
                 100% refundable if you decide not to join.
               </span>
             </div>
-            {prices.teamCall.gst === "extra" && <span className="text-sm text-ink-soft">+ GST</span>}
             <ButtonLink href="/team-call" variant="rust">
               Book Your Discovery Session
             </ButtonLink>

@@ -13,16 +13,17 @@ export default function TermsPage() {
   const city = orPlaceholder(site.courtCity, "City");
 
   return (
-    <LegalPage title="Terms & Conditions" updated="[Date]">
+    <LegalPage title="Terms & Conditions" updated={site.legalUpdated}>
       <p>
-        These terms apply when you use this website or buy anything from {business}. By creating an account or making a
-        purchase, you agree to them.
+        These terms apply when you use this website or buy anything from {business}, an individual based in{" "}
+        {site.businessAddress}. By creating an account or making a purchase, you agree to them.
       </p>
 
       <h2>What we offer</h2>
       <p>
-        Looksmaxing education and coaching: courses, a webinar, calls and personal training. Details and prices are
-        shown on each product’s page.
+        Looksmaxing education and coaching: courses, a webinar, calls and personal training. Everything is delivered
+        online; nothing is shipped. Details and prices are shown on each product’s page, and how and when you get access
+        is explained in our <Link href="/shipping-policy">Shipping &amp; Delivery Policy</Link>.
       </p>
 
       <h2>Your account</h2>
@@ -40,7 +41,7 @@ export default function TermsPage() {
 
       <h2>Payments</h2>
       <p>
-        Prices are in Indian rupees. Where a price says “+ GST”, GST is added at checkout. Payments are processed by
+        Prices are in Indian rupees, and the price shown is the full amount you pay. Payments are processed securely by
         Razorpay.
       </p>
 

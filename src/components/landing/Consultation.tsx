@@ -49,7 +49,7 @@ export default function Consultation() {
             <span className="inline-block rounded-full bg-peach px-4 py-2 text-[13px] font-semibold">Non-refundable</span>
           </div>
           <span className="text-sm text-ink-soft">
-            {prices.consultation.gst === "extra" && "+ GST · "}30 minutes · Private 1-on-1 session
+            30 minutes · Private 1-on-1 session
           </span>
           <ButtonLink href="/consultation" className="self-stretch">
             Book a Private Session

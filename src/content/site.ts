@@ -37,9 +37,14 @@ export const site = {
 
   /** Details for the contact and legal pages. */
   supportEmail: "workpragygurjar@gmail.com",
-  businessName: "", // TODO(client): registered business name
-  businessAddress: "", // TODO(client)
-  courtCity: "", // TODO(client): city for legal disputes
+  /** Pragy sells as an individual (not a company, not GST-registered). */
+  businessName: "Pragy Gurjar",
+  businessType: "Individual (sole proprietor)",
+  /** City-level only: the full home address is not shown publicly. */
+  businessAddress: "Indore, Madhya Pradesh, India",
+  courtCity: "Indore, Madhya Pradesh",
+  /** "Last updated" date on the legal pages. Change it whenever their text changes. */
+  legalUpdated: "21 November 2026",
 
   /** Link to the Skool community, for the ₹3,000 video course. */
   skoolUrl: "", // TODO(client)
@@ -68,5 +73,6 @@ export const legalLinks = [
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms & Conditions" },
   { href: "/refund-policy", label: "Refund Policy" },
+  { href: "/shipping-policy", label: "Shipping & Delivery" },
   { href: "/contact", label: "Contact" },
 ];

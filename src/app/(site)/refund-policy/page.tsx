@@ -14,7 +14,7 @@ export default function RefundPolicyPage() {
   const whatsappUrl = `https://wa.me/${site.whatsappNumber}`;
 
   return (
-    <LegalPage title="Refund Policy" updated="[Date]">
+    <LegalPage title="Refund Policy" updated={site.legalUpdated}>
       <p>
         Only the {team} discovery session can be refunded. Every other purchase is final, except a webinar that we
         cancel.
