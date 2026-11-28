@@ -250,7 +250,22 @@ export const adminVerifyApi = {
     call<{ verified: true }>("/admin/verify/confirm", { method: "POST", body: JSON.stringify({ code }) }),
 };
 
+export type AdminBooking = {
+  id: string;
+  productSlug: "team-call" | "consultation";
+  startsAt: string;
+  endsAt: string;
+  status: "BOOKED" | "NEEDS_NEW_TIME" | "CANCELLED";
+  meetingUrl: string | null;
+  discountCode: string | null;
+  user: { name: string | null; email: string; phone: string | null };
+  order: { id: string; amountPaise: number; status: string; paidAt: string | null };
+};
+
 export const manageApi = {
+  bookings: (when: "upcoming" | "past" | "attention") =>
+    call<{ when: string; attention: number; bookings: AdminBooking[] }>(`/admin/bookings?when=${when}`),
+
   setLeadStatus: (id: string, status: LeadStatus) =>
     call<{ id: string; status: LeadStatus }>(`/admin/pt-leads/${encodeURIComponent(id)}`, json("PATCH", { status })),
   exportLeads: () => call<{ leads: ExportedLead[] }>("/admin/pt-leads/export"),

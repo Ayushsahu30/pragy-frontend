@@ -13,6 +13,7 @@ import { refreshSession, signOut, useSession } from "@/lib/session";
 const navItems = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/orders", label: "Orders & refunds" },
+  { href: "/admin/bookings", label: "Bookings" },
   { href: "/admin/webinars", label: "Webinars" },
   { href: "/admin/promo-codes", label: "Promo codes" },
   { href: "/admin/access", label: "People & access" },

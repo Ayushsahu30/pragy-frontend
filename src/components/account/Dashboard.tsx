@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import LockedProducts from "@/components/account/LockedProducts";
+import MyCalls from "@/components/account/MyCalls";
 import MyCourses from "@/components/account/MyCourses";
 import MyPayments from "@/components/account/MyPayments";
 import MyVault from "@/components/account/MyVault";
@@ -216,43 +217,7 @@ export default function Dashboard() {
           />
         )}
 
-        <section id="calls" aria-labelledby="dash-calls" className="flex scroll-mt-6 flex-col gap-4">
-          <h2 id="dash-calls" className={sectionTitle}>
-            My calls
-          </h2>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-4">
-            {[
-              {
-                eyebrow: `Discovery session · ${formatINR(prices.teamCall.amount)}`,
-                title: "With my team",
-                note: "100% refundable if you decide not to join.",
-                href: "/team-call",
-                cta: `Book ${formatINR(prices.teamCall.amount)} call`,
-              },
-              {
-                eyebrow: `Private consultation · ${formatINR(prices.consultation.amount)}`,
-                title: `With ${site.trainerName}`,
-                note: "Non-refundable. Pick your time slot, then pay.",
-                href: "/consultation",
-                cta: "Book a private session",
-              },
-            ].map((call) => (
-              <article key={call.title} className={`${card} flex flex-col gap-3.5`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <Eyebrow>{call.eyebrow}</Eyebrow>
-                    <h3 className="m-0 mt-0.5 font-serif text-[30px] font-medium leading-[1.1]">{call.title}</h3>
-                  </div>
-                  <span className="flex-none rounded-full bg-sand px-3 py-1 text-xs font-semibold">Not booked</span>
-                </div>
-                <p className="m-0 text-sm text-ink-soft">{call.note}</p>
-                <Link href={call.href} className={buttonClass("dark", "mt-auto min-h-[50px] px-5")}>
-                  {call.cta}
-                </Link>
-              </article>
-            ))}
-          </div>
-        </section>
+        <MyCalls sectionTitle={sectionTitle} />
 
         <MyPayments sectionTitle={sectionTitle} />
 

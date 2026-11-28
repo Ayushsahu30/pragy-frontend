@@ -58,6 +58,13 @@ export type OrderSummary = {
   webinar: { id: string; title: string; startsAt: string } | null;
   /** For courses: when access ends (null = never). */
   access: { endsAt: string | null } | null;
+  /** For calls: the booked time and Meet link (PENDING until booked). */
+  call: {
+    startsAt: string;
+    status: "BOOKED" | "NEEDS_NEW_TIME" | "CANCELLED" | "PENDING";
+    meetingUrl: string | null;
+    discountCode: string | null;
+  } | null;
   paidAt: string | null;
 };
 
@@ -79,6 +86,13 @@ export const paymentsApi = {
     call<CheckoutDetails>("/payments/orders", {
       method: "POST",
       body: JSON.stringify({ product: "pdf-course", promoCode }),
+    }),
+
+  /** A paid call at the picked time. */
+  startCallOrder: (product: "team-call" | "consultation", slotStart: string, promoCode?: string) =>
+    call<CheckoutDetails>("/payments/orders", {
+      method: "POST",
+      body: JSON.stringify({ product, slotStart, promoCode }),
     }),
 
   /** A personal coaching plan, e.g. "pt-elite-3m". */

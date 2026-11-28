@@ -7,7 +7,13 @@ import { site } from "@/content/site";
 import { PT_PLANS_PATH } from "@/lib/pt";
 
 /** Where each product's "Try again" goes. */
-const retryHref: Record<string, string> = { webinar: "/webinar", "pdf-course": "/pdf-course", pt: PT_PLANS_PATH };
+const retryHref: Record<string, string> = {
+  webinar: "/webinar",
+  "pdf-course": "/pdf-course",
+  pt: PT_PLANS_PATH,
+  "team-call": "/team-call",
+  consultation: "/consultation",
+};
 
 /** The provider's reason and the buttons, read from ?product=...&reason=... */
 export default function PaymentFailedActions() {
